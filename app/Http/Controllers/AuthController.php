@@ -20,7 +20,7 @@ class AuthController extends Controller
 
             return Auth::user()->role === 'admin'
                 ? redirect()->route('menu')
-                : redirect()->route('absensi');
+                : redirect()->route('presensi');
         }
 
         return back()->withErrors(['username' => 'Username atau password salah.']);

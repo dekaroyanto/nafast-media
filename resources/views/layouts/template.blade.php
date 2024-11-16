@@ -101,8 +101,8 @@
 
                         <li class="sidebar-item {{ Request::is('menu') ? 'active' : '' }}">
                             <a href="{{ route('menu') }}" class="sidebar-link">
-                                <i class="bi bi-box-arrow-left"></i>
-                                <span>Exit</span>
+                                <i class="bi bi-house-door-fill"></i>
+                                <span>Home</span>
                             </a>
                         </li>
 

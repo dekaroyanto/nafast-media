@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\JabatanController;
+use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventarisController;
 
@@ -47,7 +48,8 @@ Route::middleware(['auth', 'role:admin', 'check.ip'])->group(function () {
 
 // Hanya karyawan yang bisa akses absensi
 Route::middleware(['auth', 'role:karyawan', 'check.ip'])->group(function () {
-    Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi');
+    Route::get('/presensi', [PresensiController::class, 'index'])->name('presensi');
+    Route::post('/presensi', [PresensiController::class, 'store'])->name('presensi.store');
 });
 
 // Route::get('/check-ip', function (Request $request) {
