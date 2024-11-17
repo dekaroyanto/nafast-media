@@ -19,17 +19,22 @@ class PresensiController extends Controller
         $now = now();
 
         // Cari data presensi hari ini
-        $presensi = Presensi::where('user_id', $user->id)
+        $presensiHariIni = Presensi::where('user_id', $user->id)
             ->whereDate('datang', $now->toDateString())
             ->first();
 
+        // Ambil semua data presensi user dengan pagination
+        $riwayatPresensi = Presensi::where('user_id', $user->id)
+            ->orderBy('datang', 'desc')
+            ->paginate(10); // 10 data per halaman
+
         // Tentukan status presensi
         $status = 'datang'; // Default
-        if ($presensi && $presensi->datang && !$presensi->pulang) {
+        if ($presensiHariIni && $presensiHariIni->datang && !$presensiHariIni->pulang) {
             $status = 'pulang';
         }
 
-        return view('gaji.presensi.index', compact('status', 'now'));
+        return view('gaji.presensi.index', compact('status', 'now', 'riwayatPresensi'));
     }
 
     /**

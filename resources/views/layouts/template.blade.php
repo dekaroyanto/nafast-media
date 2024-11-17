@@ -99,6 +99,14 @@
                             </ul>
                         </li>
 
+                        <li class="sidebar-item {{ Request::is('presensi') ? 'active' : '' }}">
+                            <a href="{{ route('presensi') }}" class="sidebar-link">
+                                <i class="bi bi-calendar-check"></i>
+                                <span>Presensi</span>
+                            </a>
+                        </li>
+
+
                         <li class="sidebar-item {{ Request::is('menu') ? 'active' : '' }}">
                             <a href="{{ route('menu') }}" class="sidebar-link">
                                 <i class="bi bi-house-door-fill"></i>
