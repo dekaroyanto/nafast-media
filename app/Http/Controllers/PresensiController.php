@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\Presensi;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class PresensiController extends Controller
 {
@@ -61,12 +62,19 @@ class PresensiController extends Controller
 
             return redirect()->route('presensi')->with('success', 'Presensi datang berhasil dicatat.');
         } elseif (!$presensi->pulang) {
-            // Tambahkan waktu pulang
+            // Tambahkan waktu pulang dan hitung lama jam kerja
+            $datang = Carbon::parse($presensi->datang);
+            $pulang = $now;
+            $duration = $datang->diff($pulang);
+
+            $lamaJamKerja = $duration->h . ' jam ' . $duration->i . ' menit';
+
             $presensi->update([
-                'pulang' => $now,
+                'pulang' => $pulang,
+                'lama_jam_kerja' => $lamaJamKerja,
             ]);
 
-            return redirect()->route('presensi')->with('success', 'Presensi pulang berhasil dicatat.');
+            return redirect()->route('presensi')->with('success', 'Presensi pulang berhasil dicatat. Lama jam kerja: ' . $lamaJamKerja);
         } else {
             return redirect()->route('presensi')->with('error', 'Anda sudah melakukan presensi hari ini.');
         }

@@ -19,6 +19,10 @@
                 @csrf
                 <button type="submit" class="btn btn-primary">Presensi</button>
             </form>
+
+            @if ($status === 'pulang' && isset($presensi->lama_jam_kerja))
+                <p class="mt-3">Lama Jam Kerja: <strong>{{ $presensi->lama_jam_kerja }}</strong></p>
+            @endif
         </div>
     </div>
 
