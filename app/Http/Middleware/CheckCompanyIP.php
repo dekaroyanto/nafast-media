@@ -15,6 +15,9 @@ class CheckCompanyIP
     protected $allowedIPs = [
         '192.168.1.6',
         '192.168.1.19',
+        '192.168.1.26',
+        '192.168.100.187'
+
     ];
 
     public function handle(Request $request, Closure $next)
