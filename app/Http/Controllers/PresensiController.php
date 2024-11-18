@@ -31,7 +31,10 @@ class PresensiController extends Controller
             $startDate = $request->start_date;
             $endDate = $request->end_date;
 
-            $query->whereBetween('datang', [$startDate, $endDate]);
+            $query->whereBetween('datang', [
+                $startDate . ' 00:00:00', // Mulai tanggal jam 00:00:00
+                $endDate . ' 23:59:59'    // Sampai tanggal jam 23:59:59
+            ]);
         }
 
         // Order by descending and paginate

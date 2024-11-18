@@ -8,6 +8,7 @@ use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventarisController;
+use App\Http\Controllers\PresensiKaryawanController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -40,6 +41,8 @@ Route::middleware(['auth', 'role:admin', 'check.ip'])->group(function () {
     Route::get('/jabatan/edit', [JabatanController::class, 'edit'])->name('jabatan.edit');
     Route::post('/jabatan/update', [JabatanController::class, 'update'])->name('jabatan.update');
     Route::delete('/jabatan/{id}', [JabatanController::class, 'destroy'])->name('jabatan.destroy');
+
+    Route::get('/presensikaryawan', [PresensiKaryawanController::class, 'index'])->name('presensikaryawan');
 
 
 

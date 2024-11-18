@@ -99,8 +99,8 @@
                                     </li>
                                 </ul>
 
-                            <li class="sidebar-item {{ Request::is('presensi') ? 'active' : '' }}">
-                                <a href="{{ route('presensi') }}" class="sidebar-link">
+                            <li class="sidebar-item {{ Request::is('presensikaryawan') ? 'active' : '' }}">
+                                <a href="{{ route('presensikaryawan') }}" class="sidebar-link">
                                     <i class="bi bi-calendar-check"></i>
                                     <span>Presensi Karyawan</span>
                                 </a>
