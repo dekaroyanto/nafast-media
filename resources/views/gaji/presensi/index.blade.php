@@ -15,9 +15,11 @@
             </h1>
         </div>
         <div class="card-body">
-            <form action="{{ route('presensi.store') }}" method="POST">
+            <form id="presensiForm" action="{{ route('presensi') }}" method="POST">
                 @csrf
-                <button type="submit" class="btn btn-primary">Presensi</button>
+                <button type="button" id="presensiButton" class="btn btn-primary">
+                    Presensi
+                </button>
             </form>
 
             @if ($status === 'pulang' && isset($presensiHariIni->lama_jam_kerja))
@@ -31,6 +33,23 @@
             <h2>Riwayat Presensi</h2>
         </div>
         <div class="card-body">
+            <form method="GET" action="{{ route('presensi') }}" class="mb-3">
+                <div class="row align-items-end">
+                    <div class="col-md-4">
+                        <label for="start_date" class="form-label">Mulai</label>
+                        <input type="date" name="start_date" id="start_date" class="form-control"
+                            value="{{ request('start_date') }}" placeholder="Tanggal Mulai">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="end_date" class="form-label">Sampai</label>
+                        <input type="date" name="end_date" id="end_date" class="form-control"
+                            value="{{ request('end_date') }}" placeholder="Tanggal Selesai">
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary mt-4">Filter</button>
+                    </div>
+                </div>
+            </form>
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
@@ -62,12 +81,29 @@
             </div>
             <!-- Pagination -->
             <div class="d-flex justify-content-center">
-                {{ $riwayatPresensi->links('pagination::bootstrap-4') }}
+                {{ $riwayatPresensi->appends(request()->except('page'))->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>
 
     <script>
+        document.getElementById('presensiButton').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Konfirmasi Presensi',
+                text: "Apakah Anda yakin ingin melakukan presensi {{ $status === 'datang' ? 'datang' : 'pulang' }}?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Presensi!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('presensiForm').submit();
+                }
+            });
+        });
+
         @if (session('success'))
             Swal.fire({
                 icon: 'success',

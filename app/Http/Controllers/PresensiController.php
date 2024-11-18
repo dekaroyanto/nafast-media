@@ -13,7 +13,7 @@ class PresensiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
         $now = now();
@@ -23,10 +23,19 @@ class PresensiController extends Controller
             ->whereDate('datang', $now->toDateString())
             ->first();
 
-        // Ambil semua data presensi user dengan pagination
-        $riwayatPresensi = Presensi::where('user_id', $user->id)
-            ->orderBy('datang', 'desc')
-            ->paginate(10); // 10 data per halaman
+        // Ambil semua data presensi user
+        $query = Presensi::where('user_id', $user->id);
+
+        // Filter berdasarkan rentang tanggal
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $startDate = $request->start_date;
+            $endDate = $request->end_date;
+
+            $query->whereBetween('datang', [$startDate, $endDate]);
+        }
+
+        // Order by descending and paginate
+        $riwayatPresensi = $query->orderBy('datang', 'desc')->paginate(10);
 
         // Tentukan status presensi
         $status = 'datang'; // Default

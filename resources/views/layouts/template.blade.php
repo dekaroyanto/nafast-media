@@ -76,43 +76,56 @@
                     <ul class="menu">
                         <li class="sidebar-title">Menu</li>
 
-                        <li class="sidebar-item {{ Request::is('dashboard') ? 'active' : '' }}">
-                            <a href="{{ route('dashboard') }}" class="sidebar-link">
-                                <i class="bi bi-grid-fill"></i>
-                                <span>Dashboard</span>
-                            </a>
-                        </li>
+                        @if (Auth::user()->role == 'admin')
+                            <li class="sidebar-item {{ Request::is('dashboard') ? 'active' : '' }}">
+                                <a href="{{ route('dashboard') }}" class="sidebar-link">
+                                    <i class="bi bi-grid-fill"></i>
+                                    <span>Dashboard</span>
+                                </a>
+                            </li>
 
-                        <li class="sidebar-item {{ Request::is('jabatan*') ? 'active' : '' }} has-sub">
-                            <a href="#" class="sidebar-link">
-                                <i class="bi bi-grid-1x2-fill"></i>
-                                <span>Jabatan</span>
-                            </a>
+                            <li class="sidebar-item {{ Request::is('jabatan*') ? 'active' : '' }} has-sub">
+                                <a href="#" class="sidebar-link">
+                                    <i class="bi bi-grid-1x2-fill"></i>
+                                    <span>Jabatan</span>
+                                </a>
 
-                            <ul class="submenu {{ Request::is('jabatan*') ? 'active' : '' }}">
-                                <li class="submenu-item {{ Request::is('jabatan') ? 'active' : '' }}">
-                                    <a href="{{ route('jabatan') }}" class="submenu-link">Daftar Jabatan</a>
-                                </li>
-                                <li class="submenu-item {{ Request::is('jabatan/create') ? 'active' : '' }}">
-                                    <a href="{{ route('jabatan.create') }}" class="submenu-link">Tambah Jabatan</a>
-                                </li>
-                            </ul>
-                        </li>
+                                <ul class="submenu {{ Request::is('jabatan*') ? 'active' : '' }}">
+                                    <li class="submenu-item {{ Request::is('jabatan') ? 'active' : '' }}">
+                                        <a href="{{ route('jabatan') }}" class="submenu-link">Daftar Jabatan</a>
+                                    </li>
+                                    <li class="submenu-item {{ Request::is('jabatan/create') ? 'active' : '' }}">
+                                        <a href="{{ route('jabatan.create') }}" class="submenu-link">Tambah Jabatan</a>
+                                    </li>
+                                </ul>
 
-                        <li class="sidebar-item {{ Request::is('presensi') ? 'active' : '' }}">
-                            <a href="{{ route('presensi') }}" class="sidebar-link">
-                                <i class="bi bi-calendar-check"></i>
-                                <span>Presensi</span>
-                            </a>
-                        </li>
+                            <li class="sidebar-item {{ Request::is('presensi') ? 'active' : '' }}">
+                                <a href="{{ route('presensi') }}" class="sidebar-link">
+                                    <i class="bi bi-calendar-check"></i>
+                                    <span>Presensi Karyawan</span>
+                                </a>
+                            </li>
+                            </li>
+                        @endif
 
 
-                        <li class="sidebar-item {{ Request::is('menu') ? 'active' : '' }}">
-                            <a href="{{ route('menu') }}" class="sidebar-link">
-                                <i class="bi bi-house-door-fill"></i>
-                                <span>Home</span>
-                            </a>
-                        </li>
+                        @if (Auth::user()->role == 'karyawan')
+                            <li class="sidebar-item {{ Request::is('presensi') ? 'active' : '' }}">
+                                <a href="{{ route('presensi') }}" class="sidebar-link">
+                                    <i class="bi bi-calendar-check"></i>
+                                    <span>Presensi</span>
+                                </a>
+                            </li>
+                        @endif
+
+                        @if (Auth::user()->role == 'admin')
+                            <li class="sidebar-item {{ Request::is('menu') ? 'active' : '' }}">
+                                <a href="{{ route('menu') }}" class="sidebar-link">
+                                    <i class="bi bi-house-door-fill"></i>
+                                    <span>Home</span>
+                                </a>
+                            </li>
+                        @endif
 
                     </ul>
                 </div>
