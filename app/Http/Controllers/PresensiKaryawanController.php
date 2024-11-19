@@ -10,7 +10,7 @@ class PresensiKaryawanController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Presensi::with('user'); // Menggunakan eager loading untuk relasi user
+        $query = Presensi::with(['user.jabatan']); // Menggunakan eager loading untuk relasi user
 
         // Jika ada parameter start_date dan end_date, filter presensi berdasarkan rentang tanggal
         if ($request->filled('start_date') && $request->filled('end_date')) {

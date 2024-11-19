@@ -28,6 +28,7 @@ class UserSeeder extends Seeder
             'username' => 'karyawan',
             'password' => Hash::make('karyawan'),
             'role' => 'karyawan',
+            'jabatan_id' => 1,
         ]);
 
         User::create([
@@ -36,6 +37,7 @@ class UserSeeder extends Seeder
             'username' => 'karyawan2',
             'password' => Hash::make('karyawan2'),
             'role' => 'karyawan',
+            'jabatan_id' => 2,
         ]);
     }
 }

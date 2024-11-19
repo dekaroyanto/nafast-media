@@ -19,6 +19,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('role', ['admin', 'karyawan'])->default('karyawan');
+            $table->unsignedBigInteger('jabatan_id')->nullable();
+            $table->foreign('jabatan_id')->references('id')->on('jabatans')->onDelete('set null');
             $table->rememberToken();
             $table->timestamps();
         });

@@ -31,6 +31,7 @@
                         <tr>
                             <th>Tanggal</th>
                             <th>Nama Karyawan</th>
+                            <th>Jabatan</th>
                             <th>Waktu Datang</th>
                             <th>Waktu Pulang</th>
                             <th>Lama Jam Kerja</th>
@@ -41,6 +42,7 @@
                             <tr>
                                 <td>{{ \Carbon\Carbon::parse($presensi->datang)->translatedFormat('d F Y') }}</td>
                                 <td>{{ $presensi->user->name }}</td>
+                                <td>{{ $presensi->user->jabatan->nama_jabatan ?? 'Belum diatur' }}</td>
                                 <td>{{ \Carbon\Carbon::parse($presensi->datang)->format('H:i:s') }}</td>
                                 <td>{{ $presensi->pulang ? \Carbon\Carbon::parse($presensi->pulang)->format('H:i:s') : '-' }}
                                 </td>

@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\DashboardController;
@@ -14,20 +12,10 @@ Route::get('/', function () {
     return view('auth.login');
 })->name('home');
 
-// Route::get('/home', [HomeController::class, 'home'])->name('home');
-
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-// Route::middleware(['auth', 'role:admin'])->group(function () {
-//     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-// });
-
-// Route::middleware(['auth', 'role:karyawan'])->group(function () {
-//     Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi');
-// });
 
 
 Route::middleware(['auth', 'role:admin', 'check.ip'])->group(function () {
@@ -54,7 +42,3 @@ Route::middleware(['auth', 'role:karyawan', 'check.ip'])->group(function () {
     Route::get('/presensi', [PresensiController::class, 'index'])->name('presensi');
     Route::post('/presensi', [PresensiController::class, 'store'])->name('presensi.store');
 });
-
-// Route::get('/check-ip', function (Request $request) {
-//     return $request->ip();
-// });
