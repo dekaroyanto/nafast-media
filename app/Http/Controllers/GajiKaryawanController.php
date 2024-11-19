@@ -10,6 +10,13 @@ use App\Models\MonthlyPresence;
 
 class GajiKaryawanController extends Controller
 {
+
+    public function index()
+    {
+        $gajiKaryawan = GajiKaryawan::with('user')->paginate(10);
+        return view('gaji.index', compact('gajiKaryawan'));
+    }
+
     public function create()
     {
         $karyawan = User::with('jabatan')->get(); // Ambil data karyawan beserta jabatan

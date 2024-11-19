@@ -76,6 +76,65 @@ class AuthController extends Controller
         return redirect()->route('register')->with('success', 'Akun berhasil didaftarkan. Silakan menunggu aktivasi dari admin.');
     }
 
+    public function editProfile()
+    {
+        $user = Auth::user();
+        return view('auth.edit', compact('user'));
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . Auth::id(),
+            'username' => 'required|string|max:255|unique:users,username,' . Auth::id(),
+        ]);
+
+        $user = Auth::user();
+
+        if ($user instanceof User) {
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->username = $request->username;
+            $user->save();
+        } else {
+            return redirect()->route('profile.edit')->with('error', 'User tidak ditemukan.');
+        }
+
+        return redirect()->route('profile.edit')->with('success', 'Profil berhasil diperbarui.');
+    }
+
+
+    public function editPassword()
+    {
+        return view('auth.change-password');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = Auth::user();
+
+        if (!($user instanceof \App\Models\User)) {
+            return back()->withErrors(['error' => 'User tidak ditemukan.']);
+        }
+
+        // Validasi password lama
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Password lama tidak sesuai.']);
+        }
+
+        // Update password
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return redirect()->route('profile.editPassword')->with('success', 'Password berhasil diubah.');
+    }
+
     public function logout(Request $request)
     {
         Auth::logout();
