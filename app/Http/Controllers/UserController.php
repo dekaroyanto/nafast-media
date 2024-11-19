@@ -32,6 +32,35 @@ class UserController extends Controller
             'jabatan_id' => 'required|exists:jabatans,id',
             'role' => 'required|in:admin,karyawan',
             'status' => 'required|in:active,inactive',
+        ], [
+            'name.required' => 'Nama harus diisi.',
+            'name.string' => 'Nama harus berupa teks.',
+            'name.max' => 'Nama tidak boleh lebih dari 255 karakter.',
+
+            'email.required' => 'Email harus diisi.',
+            'email.string' => 'Email harus berupa teks.',
+            'email.email' => 'Format email tidak valid.',
+            'email.max' => 'Email tidak boleh lebih dari 255 karakter.',
+            'email.unique' => 'Email sudah terdaftar.',
+
+            'username.required' => 'Username harus diisi.',
+            'username.string' => 'Username harus berupa teks.',
+            'username.max' => 'Username tidak boleh lebih dari 255 karakter.',
+            'username.unique' => 'Username sudah terdaftar.',
+
+            'password.required' => 'Password harus diisi.',
+            'password.string' => 'Password harus berupa teks.',
+            'password.min' => 'Password minimal 8 karakter.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
+
+            'jabatan_id.required' => 'Jabatan harus dipilih.',
+            'jabatan_id.exists' => 'Jabatan tidak ditemukan.',
+
+            'role.required' => 'Role harus dipilih.',
+            'role.in' => 'Role tidak valid.',
+
+            'status.required' => 'Status harus dipilih.',
+            'status.in' => 'Status tidak valid.',
         ]);
 
         User::create([
@@ -63,6 +92,11 @@ class UserController extends Controller
             'jabatan_id' => 'required|exists:jabatans,id',
             'role' => 'required|in:admin,karyawan',
             'status' => 'required|in:active,inactive',
+        ], [
+            'name.required' => 'Nama harus diisi.',
+            'name.string' => 'Nama harus berupa teks.',
+            'name.max' => 'Nama tidak boleh lebih dari 255 karakter.',
+            'email.required' => 'Email harus diisi.',
         ]);
 
         $user = User::findOrFail($id);

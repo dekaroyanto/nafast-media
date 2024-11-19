@@ -64,8 +64,8 @@
                                 </div>
                                 <div class="div">
                                     <h5>Jabatan</h5>
-                                    <select style="border-radius: 10px; padding: 10px; hover-background: #76d867"
-                                        name="jabatan_id" class="input" required>
+                                    <select style="border-radius: 10px; padding: 5px;" name="jabatan_id" class="input"
+                                        required>
                                         <option value="">Pilih Jabatan</option>
                                         @foreach ($jabatans as $jabatan)
                                             <option value="{{ $jabatan->id }}"
@@ -83,9 +83,12 @@
                         </form>
                     </div>
                     <div class="signup-image">
-                        <figure><img src="{{ asset('registerform/images/signup-image.jpg') }}" alt="sing up image">
+                        <figure><img style="width: 65%;" src="{{ asset('registerform/images/signupimage.jpg') }}"
+                                alt="sing up image">
                         </figure>
-                        <a href="{{ route('login') }}" class="signup-image-link">I am already have account</a>
+                        <a href="{{ route('login') }}" class="signup-image-link">I am
+                            already have
+                            account</a>
                     </div>
                 </div>
             </div>

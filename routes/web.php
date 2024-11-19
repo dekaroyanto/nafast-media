@@ -49,6 +49,9 @@ Route::middleware(['auth', 'role:admin', 'check.ip'])->group(function () {
     Route::get('/gaji/tambah', [GajiKaryawanController::class, 'create'])->name('gaji.create');
     Route::post('/gaji/store', [GajiKaryawanController::class, 'store'])->name('gaji.store');
     Route::get('/jumlah-hadir/{user_id}/{year}/{month}', [GajiKaryawanController::class, 'fetchJumlahHadir']);
+    Route::get('/gaji/{id}/edit', [GajiKaryawanController::class, 'edit'])->name('gaji.edit');
+    Route::put('/gaji/{id}', [GajiKaryawanController::class, 'update'])->name('gaji.update');
+    Route::delete('/gaji/{id}', [GajiKaryawanController::class, 'destroy'])->name('gaji.destroy');
 
     Route::get('/inventaris', [InventarisController::class, 'index'])->name('inventaris');
 });

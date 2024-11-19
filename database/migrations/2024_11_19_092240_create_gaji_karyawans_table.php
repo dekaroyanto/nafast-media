@@ -15,14 +15,19 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('jabatan_id');
+            $table->unsignedBigInteger('created_by');
             $table->date('tanggal_gaji');
             $table->integer('jumlah_hadir');
             $table->bigInteger('gaji_pokok');
+            $table->bigInteger('bonus')->default(0);
+            $table->bigInteger('potongan')->default(0);
+            $table->bigInteger('total_gaji')->default(0);
             $table->timestamps();
 
             // Relasi dengan tabel `users` dan `jabatans`
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('jabatan_id')->references('id')->on('jabatans')->onDelete('cascade');
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -31,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('gajikaryawans');
+        Schema::dropIfExists('gaji_karyawans');
     }
 };

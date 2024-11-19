@@ -1,26 +1,29 @@
 @extends('layouts.template')
 
-@section('title', 'Tambah Gaji Karyawan')
+@section('title', 'Edit Gaji Karyawan')
 
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h3>Tambah Gaji Karyawan</h3>
+            <h3>Edit Gaji Karyawan</h3>
         </div>
         <div class="card-body">
-            <form action="{{ route('gaji.store') }}" method="POST">
+            <form action="{{ route('gaji.update', $gajiKaryawan->id) }}" method="POST">
                 @csrf
+                @method('PUT')
+
                 <div class="mb-3">
                     <label for="tanggal_gaji" class="form-label">Tanggal Gaji</label>
-                    <input type="date" id="tanggal_gaji" name="tanggal_gaji" class="form-control" required>
+                    <input type="date" id="tanggal_gaji" name="tanggal_gaji" class="form-control"
+                        value="{{ $gajiKaryawan->tanggal_gaji }}" required>
                 </div>
                 <div class="mb-3">
                     <label for="user_id" class="form-label">Nama Karyawan</label>
                     <select id="user_id" name="user_id" class="form-control" required>
-                        <option value="">Pilih Karyawan</option>
                         @foreach ($karyawan as $k)
                             <option value="{{ $k->id }}" data-jabatan="{{ $k->jabatan->nama_jabatan }}"
-                                data-gajipokok="{{ $k->jabatan->gajipokok }}">
+                                data-gajipokok="{{ $k->jabatan->gajipokok }}"
+                                {{ $gajiKaryawan->user_id == $k->id ? 'selected' : '' }}>
                                 {{ $k->name }}
                             </option>
                         @endforeach
@@ -28,29 +31,35 @@
                 </div>
                 <div class="mb-3">
                     <label for="jabatan" class="form-label">Jabatan</label>
-                    <input type="text" id="jabatan" class="form-control" readonly>
+                    <input type="text" id="jabatan" class="form-control"
+                        value="{{ $gajiKaryawan->user->jabatan->nama_jabatan }}" readonly>
                 </div>
                 <div class="mb-3">
                     <label for="jumlah_hadir" class="form-label">Jumlah Hadir</label>
-                    <input type="text" id="jumlah_hadir" name="jumlah_hadir" class="form-control" readonly>
+                    <input type="text" id="jumlah_hadir" name="jumlah_hadir" class="form-control"
+                        value="{{ $gajiKaryawan->jumlah_hadir }}" readonly>
                 </div>
                 <div class="mb-3">
                     <label for="gaji_pokok" class="form-label">Gaji Pokok</label>
-                    <input type="text" id="gaji_pokok" name="gaji_pokok" class="form-control" readonly>
+                    <input type="text" id="gaji_pokok" name="gaji_pokok" class="form-control"
+                        value="{{ $gajiKaryawan->gaji_pokok }}" readonly>
                 </div>
                 <div class="mb-3">
                     <label for="bonus" class="form-label">Bonus</label>
-                    <input type="number" id="bonus" name="bonus" class="form-control" value="0">
+                    <input type="number" id="bonus" name="bonus" class="form-control"
+                        value="{{ $gajiKaryawan->bonus }}">
                 </div>
                 <div class="mb-3">
                     <label for="potongan" class="form-label">Potongan</label>
-                    <input type="number" id="potongan" name="potongan" class="form-control" value="0">
+                    <input type="number" id="potongan" name="potongan" class="form-control"
+                        value="{{ $gajiKaryawan->potongan }}">
                 </div>
                 <div class="mb-3">
                     <label for="total_gaji" class="form-label">Total Gaji</label>
-                    <input type="text" id="total_gaji" name="total_gaji" class="form-control" readonly>
+                    <input type="text" id="total_gaji" name="total_gaji" class="form-control"
+                        value="{{ $gajiKaryawan->total_gaji }}" readonly>
                 </div>
-                <button type="submit" class="btn btn-primary">Simpan</button>
+                <button type="submit" class="btn btn-primary">Update</button>
             </form>
         </div>
     </div>

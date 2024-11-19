@@ -416,10 +416,14 @@ figure {
     text-align: center;
 }
 
+a:hover {
+    color: #14cc8c;
+}
+
 .form-submit {
     display: inline-block;
-    background: #73a7d8;
-    color: #fff;
+    background: #31ebaa;
+    color: #040404;
     border-bottom: none;
     width: auto;
     padding: 15px 39px;
@@ -432,7 +436,7 @@ figure {
     cursor: pointer;
 }
 .form-submit:hover {
-    background: #5ada8d;
+    background: #1fda98;
 }
 
 #signin {

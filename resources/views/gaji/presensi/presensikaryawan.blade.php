@@ -57,7 +57,7 @@
                 </table>
             </div>
             <!-- Pagination -->
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-end">
                 {{ $riwayatPresensi->links('pagination::bootstrap-4') }}
             </div>
         </div>

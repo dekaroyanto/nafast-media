@@ -9,7 +9,17 @@ class GajiKaryawan extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'jabatan_id', 'tanggal_gaji', 'jumlah_hadir', 'gaji_pokok'];
+    protected $fillable = [
+        'user_id',
+        'jabatan_id',
+        'tanggal_gaji',
+        'jumlah_hadir',
+        'gaji_pokok',
+        'bonus',
+        'potongan',
+        'total_gaji',
+        'created_by'
+    ];
 
     public function user()
     {
@@ -19,5 +29,11 @@ class GajiKaryawan extends Model
     public function jabatan()
     {
         return $this->belongsTo(Jabatan::class);
+    }
+
+    // Relasi untuk user yang menginput gaji
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }
