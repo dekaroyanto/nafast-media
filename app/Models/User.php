@@ -24,7 +24,8 @@ class User extends Authenticatable
         'username',
         'password',
         'jabatan_id',
-        'role'
+        'role',
+        'status',
     ];
     public function jabatan(): BelongsTo
     {
