@@ -28,14 +28,4 @@
                 class="btn btn-secondary">Kembali</a>
         </form>
     </div>
-
-    <script>
-        @if (session('success'))
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: '{{ session('success') }}',
-            });
-        @endif
-    </script>
 @endsection

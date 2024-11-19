@@ -114,25 +114,36 @@ class AuthController extends Controller
     {
         $request->validate([
             'current_password' => 'required',
-            'new_password' => 'required|string|min:8|confirmed',
+            'new_password' => [
+                'required',
+                'string',
+                'min:8',
+                'confirmed',
+                function ($attribute, $value, $fail) use ($request) {
+                    if (Hash::check($value, $request->user()->password)) {
+                        $fail('Password baru tidak boleh sama dengan password lama.');
+                    }
+                },
+            ],
+        ], [
+            'current_password.required' => 'Password lama harus diisi.',
+            'new_password.required' => 'Password baru harus diisi.',
+            'new_password.min' => 'Password baru minimal 8 karakter.',
+            'new_password.confirmed' => 'Password baru tidak cocok.',
         ]);
 
-        $user = Auth::user();
+        $user = $request->user();
 
-        if (!($user instanceof \App\Models\User)) {
-            return back()->withErrors(['error' => 'User tidak ditemukan.']);
-        }
-
-        // Validasi password lama
         if (!Hash::check($request->current_password, $user->password)) {
-            return back()->withErrors(['current_password' => 'Password lama tidak sesuai.']);
+            return back()->with('error', 'Password lama tidak sesuai.');
         }
 
-        // Update password
         $user->password = Hash::make($request->new_password);
         $user->save();
 
-        return redirect()->route('profile.editPassword')->with('success', 'Password berhasil diubah.');
+        return redirect()
+            ->route('profile.editPassword')
+            ->with('success', 'Password berhasil diubah.');
     }
 
     public function logout(Request $request)

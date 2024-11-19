@@ -6,16 +6,6 @@
     <div class="container">
         <h1 class="my-4">Change Password</h1>
 
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
         <form action="{{ route('profile.updatePassword') }}" method="POST">
             @csrf
             <div class="mb-3">
@@ -34,25 +24,4 @@
             <button type="submit" class="btn btn-primary">Change Password</button>
         </form>
     </div>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <script>
-        @if ($errors->any())
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: @json($errors->first()),
-            });
-        @endif
-
-        @if (session('success'))
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: '{{ session('success') }}',
-            });
-        @endif
-    </script>
 @endsection

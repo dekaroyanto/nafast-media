@@ -244,24 +244,41 @@
 
 
     <script>
-        @if (session('error'))
+        @if ($errors->any())
+            let errorMessages = '';
+            @foreach ($errors->all() as $error)
+                errorMessages += '{{ $error }}\n';
+            @endforeach
+
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: '{{ session('error') }}',
+                text: errorMessages,
+                confirmButtonText: 'OK'
             });
         @endif
     </script>
 
-    <script>
-        @if (session('success'))
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: '{{ session('error') }}',
+                confirmButtonText: 'Coba Lagi',
+            });
+        </script>
+    @endif
+
+    @if (session('success'))
+        <script>
             Swal.fire({
                 icon: 'success',
                 title: 'Success',
                 text: '{{ session('success') }}',
             });
-        @endif
-    </script>
+        </script>
+    @endif
 
 
 </body>
