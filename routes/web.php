@@ -6,6 +6,7 @@ use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventarisController;
+use App\Http\Controllers\GajiKaryawanController;
 use App\Http\Controllers\PresensiKaryawanController;
 
 Route::get('/', function () {
@@ -32,7 +33,9 @@ Route::middleware(['auth', 'role:admin', 'check.ip'])->group(function () {
 
     Route::get('/presensikaryawan', [PresensiKaryawanController::class, 'index'])->name('presensikaryawan');
 
-
+    Route::get('/gaji/tambah', [GajiKaryawanController::class, 'create'])->name('gaji.create');
+    Route::post('/gaji/store', [GajiKaryawanController::class, 'store'])->name('gaji.store');
+    Route::get('/jumlah-hadir/{user_id}/{year}/{month}', [GajiKaryawanController::class, 'fetchJumlahHadir']);
 
     Route::get('/inventaris', [InventarisController::class, 'index'])->name('inventaris');
 });

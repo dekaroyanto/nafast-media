@@ -15,6 +15,7 @@ class JabatanSeeder extends Seeder
     {
         $jabatans = [
             ['nama_jabatan' => 'Manager', 'gajipokok' => 15000000],
+            ['nama_jabatan' => 'Admin', 'gajipokok' => 1800000],
             ['nama_jabatan' => 'Supervisor', 'gajipokok' => 10000000],
             ['nama_jabatan' => 'Staff', 'gajipokok' => 7000000],
             ['nama_jabatan' => 'Operator', 'gajipokok' => 5000000],

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Presensi;
+use App\Models\MonthlyPresence;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -76,6 +77,24 @@ class PresensiController extends Controller
                 'user_id' => $user->id,
                 'datang' => $now,
             ]);
+
+            // Cek atau tambahkan jumlah kehadiran untuk bulan ini
+            $currentMonth = $now->month;
+            $currentYear = $now->year;
+
+            $monthlyPresence = MonthlyPresence::firstOrCreate(
+                [
+                    'user_id' => $user->id,
+                    'month' => $currentMonth,
+                    'year' => $currentYear,
+                ],
+                [
+                    'jumlah_hadir' => 0
+                ]
+            );
+
+            // Increment jumlah hadir di bulan ini
+            $monthlyPresence->increment('jumlah_hadir');
 
             return redirect()->route('presensi')->with('success', 'Presensi datang berhasil dicatat.');
         } elseif (!$presensi->pulang) {
