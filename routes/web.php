@@ -9,7 +9,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventarisController;
 use App\Http\Controllers\GajiKaryawanController;
 use App\Http\Controllers\LaporanKaryawanController;
-use App\Http\Controllers\PresensiKaryawanController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -43,12 +42,15 @@ Route::middleware(['auth', 'role:admin', 'check.ip'])->group(function () {
     Route::post('/jabatan/update', [JabatanController::class, 'update'])->name('jabatan.update');
     Route::delete('/jabatan/{id}', [JabatanController::class, 'destroy'])->name('jabatan.destroy');
 
-    Route::get('/presensikaryawan', [PresensiKaryawanController::class, 'index'])->name('presensikaryawan');
+    Route::get('/presensikaryawan', [PresensiController::class, 'indexadmin'])->name('presensikaryawan');
+    Route::get('/presensi/admin/create', [PresensiController::class, 'createByAdmin'])->name('admin.presensi.create');
+    Route::post('/presensi/admin/store', [PresensiController::class, 'storeByAdmin'])->name('admin.presensi.store');
+
 
     Route::get('gaji', [GajiKaryawanController::class, 'index'])->name('gaji.index');
     Route::get('/gaji/tambah', [GajiKaryawanController::class, 'create'])->name('gaji.create');
     Route::post('/gaji/store', [GajiKaryawanController::class, 'store'])->name('gaji.store');
-    Route::get('/jumlah-hadir/{user_id}/{year}/{month}', [GajiKaryawanController::class, 'fetchJumlahHadir']);
+    Route::get('/jumlah-presensi/{user_id}/{year}/{month}', [GajiKaryawanController::class, 'fetchJumlahPresensi']);
     Route::get('/gaji/{id}/edit', [GajiKaryawanController::class, 'edit'])->name('gaji.edit');
     Route::put('/gaji/{id}', [GajiKaryawanController::class, 'update'])->name('gaji.update');
     Route::delete('/gaji/{id}', [GajiKaryawanController::class, 'destroy'])->name('gaji.destroy');

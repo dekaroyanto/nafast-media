@@ -18,6 +18,10 @@ return new class extends Migration
             $table->unsignedBigInteger('created_by');
             $table->date('tanggal_gaji');
             $table->integer('jumlah_hadir');
+            $table->integer('jumlah_izin')->default(0);
+            $table->integer('jumlah_sakit')->default(0);
+            $table->integer('jumlah_wfh')->default(0);
+            $table->integer('jumlah_alfa')->default(0);
             $table->bigInteger('gaji_pokok');
             $table->bigInteger('bonus')->default(0);
             $table->bigInteger('potongan')->default(0);

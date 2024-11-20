@@ -17,6 +17,7 @@ return new class extends Migration
             $table->timestamp('datang')->nullable();
             $table->timestamp('pulang')->nullable();
             $table->string('lama_jam_kerja')->nullable();
+            $table->enum('status_kehadiran', ['hadir', 'izin', 'sakit', 'wfh', 'alfa'])->default('hadir');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

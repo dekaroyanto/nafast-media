@@ -10,7 +10,7 @@ class Presensi extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'datang', 'pulang', 'lama_jam_kerja'];
+    protected $fillable = ['user_id', 'datang', 'pulang', 'lama_jam_kerja', 'status_kehadiran'];
 
     public function user()
     {

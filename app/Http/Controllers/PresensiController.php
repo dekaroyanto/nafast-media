@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-
-use App\Models\Presensi;
-use App\Models\MonthlyPresence;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+
+use App\Models\User;
+use App\Models\Presensi;
+use Illuminate\Http\Request;
+use App\Models\MonthlyPresence;
+use Illuminate\Support\Facades\Auth;
 
 class PresensiController extends Controller
 {
@@ -50,9 +51,72 @@ class PresensiController extends Controller
         return view('gaji.presensi.index', compact('status', 'now', 'riwayatPresensi'));
     }
 
+    public function indexadmin(Request $request)
+    {
+        $query = Presensi::with(['user.jabatan']); // Eager loading relasi user dan jabatan
+
+        // Filter berdasarkan rentang tanggal
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $query->whereBetween('datang', [$request->start_date, $request->end_date]);
+        }
+
+        // Search berdasarkan kata kunci
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('user', function ($subQuery) use ($search) {
+                    $subQuery->where('name', 'like', "%{$search}%"); // Cari berdasarkan nama karyawan
+                })
+                    ->orWhereHas('user.jabatan', function ($subQuery) use ($search) {
+                        $subQuery->where('nama_jabatan', 'like', "%{$search}%"); // Cari berdasarkan jabatan
+                    })
+                    ->orWhere('status_kehadiran', 'like', "%{$search}%") // Cari berdasarkan status kehadiran
+                    ->orWhere('datang', 'like', "%{$search}%") // Cari berdasarkan tanggal datang
+                    ->orWhere('pulang', 'like', "%{$search}%"); // Cari berdasarkan waktu pulang
+            });
+        }
+
+        $riwayatPresensi = $query->orderBy('datang', 'desc')->paginate(10);
+
+        return view('gaji.presensi.presensikaryawan', compact('riwayatPresensi'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */
+
+    public function createByAdmin()
+    {
+        $karyawan = User::where('role', 'karyawan')->get();
+        return view('gaji.presensi.create-presensi', compact('karyawan'));
+    }
+
+    public function storeByAdmin(Request $request)
+    {
+        $request->validate([
+            'tanggal_presensi' => 'required|date',
+            'user_id' => 'required|exists:users,id',
+            'status_kehadiran' => 'required|in:izin,sakit,wfh,alfa',
+        ]);
+
+        // Cek apakah presensi untuk tanggal ini sudah ada
+        $existingPresensi = Presensi::where('user_id', $request->user_id)
+            ->whereDate('datang', $request->tanggal_presensi)
+            ->first();
+
+        if ($existingPresensi) {
+            return back()->with('error', 'Presensi untuk tanggal ini sudah ada.');
+        }
+
+        Presensi::create([
+            'user_id' => $request->user_id,
+            'datang' => Carbon::parse($request->tanggal_presensi),
+            'status_kehadiran' => $request->status_kehadiran,
+        ]);
+
+        return redirect()->route('presensikaryawan')->with('success', 'Presensi berhasil ditambahkan.');
+    }
     public function create()
     {
         //
@@ -76,6 +140,7 @@ class PresensiController extends Controller
             Presensi::create([
                 'user_id' => $user->id,
                 'datang' => $now,
+                'status_kehadiran' => 'hadir', // Default status saat presensi datang
             ]);
 
             // Cek atau tambahkan jumlah kehadiran untuk bulan ini

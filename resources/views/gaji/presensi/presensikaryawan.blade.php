@@ -6,21 +6,29 @@
             <h2>Riwayat Presensi</h2>
         </div>
         <div class="card-body">
-            <!-- Form Filter Tanggal -->
+            <a href="{{ route('admin.presensi.create') }}" class="btn btn-primary mb-4">Tambah Presensi</a>
+
+            <!-- Form Search dan Filter -->
             <form action="{{ route('presensikaryawan') }}" method="GET" class="mb-4">
                 <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-4">
+                        <label for="search">Pencarian</label>
+                        <input type="text" id="search" name="search" class="form-control"
+                            placeholder="Cari data presensi..." value="{{ request('search') }}">
+                    </div>
+                    <div class="col-md-3">
                         <label for="start_date">Mulai Tanggal</label>
                         <input type="date" id="start_date" name="start_date" class="form-control"
                             value="{{ request('start_date') }}">
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-3">
                         <label for="end_date">Sampai Tanggal</label>
                         <input type="date" id="end_date" name="end_date" class="form-control"
                             value="{{ request('end_date') }}">
                     </div>
-                    <div class="col-md-2 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary">Filter</button>
+                    <div class="col-md-2 d-flex align-items-end gap-2">
+                        <button type="submit" class="btn btn-primary">Cari.....</button>
+                        <a href="{{ route('presensikaryawan') }}" class="btn btn-secondary w-100">Reset</a>
                     </div>
                 </div>
             </form>
@@ -35,6 +43,7 @@
                             <th>Waktu Datang</th>
                             <th>Waktu Pulang</th>
                             <th>Lama Jam Kerja</th>
+                            <th>Status Kehadiran</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,10 +56,11 @@
                                 <td>{{ $presensi->pulang ? \Carbon\Carbon::parse($presensi->pulang)->format('H:i:s') : '-' }}
                                 </td>
                                 <td>{{ $presensi->lama_jam_kerja ?? '-' }}</td>
+                                <td>{{ $presensi->status_kehadiran }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center">Belum ada data presensi.</td>
+                                <td colspan="7" class="text-center">Belum ada data presensi.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -58,7 +68,7 @@
             </div>
             <!-- Pagination -->
             <div class="d-flex justify-content-end">
-                {{ $riwayatPresensi->links('pagination::bootstrap-4') }}
+                {{ $riwayatPresensi->links('pagination::bootstrap-5') }}
             </div>
         </div>
     </div>

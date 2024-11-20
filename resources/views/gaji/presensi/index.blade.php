@@ -59,6 +59,7 @@
                             <th>Waktu Datang</th>
                             <th>Waktu Pulang</th>
                             <th>Lama Jam Kerja</th>
+                            <th>Status Kehadiran</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -70,10 +71,11 @@
                                 <td>{{ $presensi->pulang ? \Carbon\Carbon::parse($presensi->pulang)->format('H:i:s') : '-' }}
                                 </td>
                                 <td>{{ $presensi->lama_jam_kerja ?? '-' }}</td>
+                                <td>{{ $presensi->status_kehadiran }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center">Belum ada data presensi.</td>
+                                <td colspan="6" class="text-center">Belum ada data presensi.</td>
                             </tr>
                         @endforelse
                     </tbody>

@@ -11,7 +11,6 @@
             <form action="{{ route('gaji.update', $gajiKaryawan->id) }}" method="POST">
                 @csrf
                 @method('PUT')
-
                 <div class="mb-3">
                     <label for="tanggal_gaji" class="form-label">Tanggal Gaji</label>
                     <input type="date" id="tanggal_gaji" name="tanggal_gaji" class="form-control"
@@ -20,10 +19,11 @@
                 <div class="mb-3">
                     <label for="user_id" class="form-label">Nama Karyawan</label>
                     <select id="user_id" name="user_id" class="form-control" required>
+                        <option value="">Pilih Karyawan</option>
                         @foreach ($karyawan as $k)
                             <option value="{{ $k->id }}" data-jabatan="{{ $k->jabatan->nama_jabatan }}"
                                 data-gajipokok="{{ $k->jabatan->gajipokok }}"
-                                {{ $gajiKaryawan->user_id == $k->id ? 'selected' : '' }}>
+                                {{ $k->id == $gajiKaryawan->user_id ? 'selected' : '' }}>
                                 {{ $k->name }}
                             </option>
                         @endforeach
@@ -37,7 +37,27 @@
                 <div class="mb-3">
                     <label for="jumlah_hadir" class="form-label">Jumlah Hadir</label>
                     <input type="text" id="jumlah_hadir" name="jumlah_hadir" class="form-control"
-                        value="{{ $gajiKaryawan->jumlah_hadir }}" readonly>
+                        value="{{ $gajiKaryawan->jumlah_hadir }}">
+                </div>
+                <div class="mb-3">
+                    <label for="jumlah_izin" class="form-label">Jumlah Izin</label>
+                    <input type="text" id="jumlah_izin" name="jumlah_izin" class="form-control"
+                        value="{{ $gajiKaryawan->jumlah_izin }}">
+                </div>
+                <div class="mb-3">
+                    <label for="jumlah_sakit" class="form-label">Jumlah Sakit</label>
+                    <input type="text" id="jumlah_sakit" name="jumlah_sakit" class="form-control"
+                        value="{{ $gajiKaryawan->jumlah_sakit }}">
+                </div>
+                <div class="mb-3">
+                    <label for="jumlah_wfh" class="form-label">Jumlah WFH</label>
+                    <input type="text" id="jumlah_wfh" name="jumlah_wfh" class="form-control"
+                        value="{{ $gajiKaryawan->jumlah_wfh }}">
+                </div>
+                <div class="mb-3">
+                    <label for="jumlah_alfa" class="form-label">Jumlah Alfa</label>
+                    <input type="text" id="jumlah_alfa" name="jumlah_alfa" class="form-control"
+                        value="{{ $gajiKaryawan->jumlah_alfa }}">
                 </div>
                 <div class="mb-3">
                     <label for="gaji_pokok" class="form-label">Gaji Pokok</label>
@@ -59,7 +79,7 @@
                     <input type="text" id="total_gaji" name="total_gaji" class="form-control"
                         value="{{ $gajiKaryawan->total_gaji }}" readonly>
                 </div>
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
             </form>
         </div>
     </div>
@@ -78,29 +98,33 @@
             document.getElementById('gaji_pokok').value = gajiPokok;
             calculateTotalGaji();
 
-            // Jika tanggal gaji terisi, ambil jumlah hadir menggunakan AJAX
+            // Jika tanggal gaji terisi, ambil jumlah presensi menggunakan AJAX
             if (tanggalGaji) {
-                fetchJumlahHadir(userId, tanggalGaji);
+                fetchJumlahPresensi(userId, tanggalGaji);
             }
         });
 
-        // Fungsi untuk mengisi jumlah hadir saat tanggal gaji diubah
+        // Fungsi untuk mengisi jumlah presensi saat tanggal gaji diubah
         document.getElementById('tanggal_gaji').addEventListener('change', function() {
             const userId = document.getElementById('user_id').value;
             if (userId) {
-                fetchJumlahHadir(userId, this.value);
+                fetchJumlahPresensi(userId, this.value);
             }
         });
 
-        // Fungsi AJAX untuk mengambil jumlah hadir
-        function fetchJumlahHadir(userId, tanggalGaji) {
+        // Fungsi AJAX untuk mengambil jumlah presensi
+        function fetchJumlahPresensi(userId, tanggalGaji) {
             const [year, month] = tanggalGaji.split('-');
-            fetch(`/jumlah-hadir/${userId}/${year}/${month}`)
+            fetch(`/jumlah-presensi/${userId}/${year}/${month}`)
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('jumlah_hadir').value = data.jumlah_hadir || 0;
+                    document.getElementById('jumlah_izin').value = data.jumlah_izin || 0;
+                    document.getElementById('jumlah_sakit').value = data.jumlah_sakit || 0;
+                    document.getElementById('jumlah_wfh').value = data.jumlah_wfh || 0;
+                    document.getElementById('jumlah_alfa').value = data.jumlah_alfa || 0;
                 })
-                .catch(error => console.error('Error fetching jumlah hadir:', error));
+                .catch(error => console.error('Error fetching jumlah presensi:', error));
         }
 
         // Fungsi untuk menghitung total gaji
