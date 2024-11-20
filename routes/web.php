@@ -9,6 +9,7 @@ use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventarisController;
 use App\Http\Controllers\GajiKaryawanController;
+use App\Http\Controllers\LaporanKaryawanController;
 use App\Http\Controllers\PresensiKaryawanController;
 
 Route::get('/', function () {
@@ -62,10 +63,17 @@ Route::middleware(['auth', 'role:karyawan', 'check.ip'])->group(function () {
     Route::post('/presensi', [PresensiController::class, 'store'])->name('presensi.store');
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'check.ip'])->group(function () {
     Route::get('/profile', [AuthController::class, 'editProfile'])->name('profile.edit');
     Route::post('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
 
     Route::get('/profile/change-password', [AuthController::class, 'editPassword'])->name('profile.editPassword');
     Route::post('/profile/change-password', [AuthController::class, 'updatePassword'])->name('profile.updatePassword');
+
+    Route::get('/laporan', [LaporanKaryawanController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan/create', [LaporanKaryawanController::class, 'create'])->name('laporan.create');
+    Route::post('/laporan', [LaporanKaryawanController::class, 'store'])->name('laporan.store');
+    Route::get('/laporan/{id}/edit', [LaporanKaryawanController::class, 'edit'])->name('laporan.edit');
+    Route::put('/laporan/{id}', [LaporanKaryawanController::class, 'update'])->name('laporan.update');
+    Route::delete('/laporan/{id}', [LaporanKaryawanController::class, 'destroy'])->name('laporan.destroy');
 });

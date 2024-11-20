@@ -139,6 +139,13 @@
                             </li>
                         @endif
 
+                        <li class="sidebar-item {{ Request::is('laporan') ? 'active' : '' }}">
+                            <a href="{{ route('laporan.index') }}" class="sidebar-link">
+                                <i class="bi bi-clipboard2-minus-fill"></i>
+                                <span>Laporan</span>
+                            </a>
+                        </li>
+
                         @if (Auth::user()->role == 'admin')
                             <li class="sidebar-item {{ Request::is('menu') ? 'active' : '' }}">
                                 <a href="{{ route('menu') }}" class="sidebar-link">

@@ -26,7 +26,7 @@ class PresensiKaryawanController extends Controller
         }
 
         // Ambil data presensi dengan urutan terbaru
-        $riwayatPresensi = $query->orderBy('datang', 'desc')->paginate(2);
+        $riwayatPresensi = $query->orderBy('datang', 'desc')->paginate(10);
 
         return view('gaji.presensi.presensikaryawan', compact('riwayatPresensi'));
     }
