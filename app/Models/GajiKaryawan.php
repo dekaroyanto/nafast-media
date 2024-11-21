@@ -18,11 +18,13 @@ class GajiKaryawan extends Model
         'jumlah_sakit',
         'jumlah_wfh',
         'jumlah_alfa',
+        'jumlah_hari_kerja',
         'gaji_pokok',
+        'gaji_per_hari',
         'bonus',
         'potongan',
         'total_gaji',
-        'created_by'
+        'created_by',
     ];
 
     public function user()

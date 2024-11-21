@@ -22,6 +22,8 @@ return new class extends Migration
             $table->integer('jumlah_sakit')->default(0);
             $table->integer('jumlah_wfh')->default(0);
             $table->integer('jumlah_alfa')->default(0);
+            $table->integer('jumlah_hari_kerja')->nullable();
+            $table->decimal('gaji_per_hari', 15, 2)->nullable();
             $table->bigInteger('gaji_pokok');
             $table->bigInteger('bonus')->default(0);
             $table->bigInteger('potongan')->default(0);
