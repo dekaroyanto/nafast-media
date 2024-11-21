@@ -46,31 +46,43 @@ class GajiKaryawanController extends Controller
             'user_id' => 'required|exists:users,id',
             'tanggal_gaji' => 'required|date',
             'jumlah_hadir' => 'required|integer',
-            'jumlah_izin' => 'required|integer',
-            'jumlah_sakit' => 'required|integer',
-            'jumlah_wfh' => 'required|integer',
-            'jumlah_alfa' => 'required|integer',
-            'gaji_pokok' => 'required|numeric',
-            'bonus' => 'nullable|numeric',
-            'potongan' => 'nullable|numeric',
+            'jumlah_hari_kerja' => 'required|integer|min:1',
         ]);
 
         $user = User::findOrFail($request->user_id);
         $jabatan = $user->jabatan;
+
+        $gajiPerHari = ceil($jabatan->gajipokok / $request->jumlah_hari_kerja);
+        $gajiPerHariDidapat = $gajiPerHari * $request->jumlah_hadir;
+
+        $tunjanganTransportBulanan = $jabatan->tunjangan_transportasi * $request->jumlah_hari_kerja;
+        $tunjanganTransportDidapat = $jabatan->tunjangan_transportasi * $request->jumlah_hadir;
+
+        $tunjanganMakanBulanan = $jabatan->tunjangan_makan * $request->jumlah_hari_kerja;
+        $tunjanganMakanDidapat = $jabatan->tunjangan_makan * $request->jumlah_hadir;
+
+        $totalGaji = $gajiPerHariDidapat + $request->bonus + $tunjanganTransportDidapat + $tunjanganMakanDidapat + $jabatan->tunjangan_kesehatan - $request->potongan;
 
         GajiKaryawan::create([
             'user_id' => $user->id,
             'jabatan_id' => $jabatan->id,
             'tanggal_gaji' => $request->tanggal_gaji,
             'jumlah_hadir' => $request->jumlah_hadir,
-            'jumlah_izin' => $request->jumlah_izin,
-            'jumlah_sakit' => $request->jumlah_sakit,
-            'jumlah_wfh' => $request->jumlah_wfh,
-            'jumlah_alfa' => $request->jumlah_alfa,
+            'jumlah_hari_kerja' => $request->jumlah_hari_kerja,
             'gaji_pokok' => $jabatan->gajipokok,
-            'bonus' => $request->bonus ?? 0,
-            'potongan' => $request->potongan ?? 0,
-            'total_gaji' => ($jabatan->gajipokok + ($request->bonus ?? 0)) - ($request->potongan ?? 0),
+            'gaji_per_hari' => $gajiPerHari,
+            'gaji_per_hari_didapat' => $gajiPerHariDidapat,
+            'tunjangan_transportasi' => $jabatan->tunjangan_transportasi,
+            'tunjangan_transport_bulanan' => $tunjanganTransportBulanan,
+            'tunjangan_transport_didapat' => $tunjanganTransportDidapat,
+            'tunjangan_makan' => $jabatan->tunjangan_makan,
+            'tunjangan_makan_bulanan' => $tunjanganMakanBulanan,
+            'tunjangan_makan_didapat' => $tunjanganMakanDidapat,
+            'tunjangan_kesehatan' => $jabatan->tunjangan_kesehatan,
+            'tunjangan_jabatan' => $jabatan->tunjangan_jabatan,
+            'bonus' => $request->bonus,
+            'potongan' => $request->potongan,
+            'total_gaji' => $totalGaji,
             'created_by' => Auth::id(),
         ]);
 
@@ -98,7 +110,11 @@ class GajiKaryawanController extends Controller
     {
         $gajiKaryawan = GajiKaryawan::with('user.jabatan')->findOrFail($id);
         $karyawan = User::with('jabatan')->get();
-        return view('gaji.edit', compact('gajiKaryawan', 'karyawan'));
+
+        // Hitung Tunjangan Transport Per Hari
+        $tunjanganTransportPerHari = $gajiKaryawan->user->jabatan->tunjangan_transportasi;
+
+        return view('gaji.edit', compact('gajiKaryawan', 'karyawan', 'tunjanganTransportPerHari'));
     }
 
     public function update(Request $request, $id)
@@ -106,38 +122,47 @@ class GajiKaryawanController extends Controller
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'tanggal_gaji' => 'required|date',
-            'jumlah_hadir' => 'required|integer',
-            'jumlah_izin' => 'required|integer',
-            'jumlah_sakit' => 'required|integer',
-            'jumlah_wfh' => 'required|integer',
-            'jumlah_alfa' => 'required|integer',
-            'gaji_pokok' => 'required|numeric',
-            'bonus' => 'nullable|numeric',
-            'potongan' => 'nullable|numeric',
+            'jumlah_hari_kerja' => 'required|integer|min:1',
+            'jumlah_hadir' => 'required|integer|min:0',
+            'bonus' => 'nullable|numeric|min:0',
         ]);
 
         $gajiKaryawan = GajiKaryawan::findOrFail($id);
         $user = User::findOrFail($request->user_id);
         $jabatan = $user->jabatan;
 
+        // Perhitungan
+        $gajiPerHari = ceil($jabatan->gajipokok / $request->jumlah_hari_kerja);
+        $gajiPerHariDidapat = $gajiPerHari * $request->jumlah_hadir;
+        $tunjanganTransportPerBulanDidapat = $jabatan->tunjangan_transportasi * $request->jumlah_hadir;
+        $tunjanganMakanPerBulanDidapat = $jabatan->tunjangan_makan * $request->jumlah_hadir;
+        $totalGaji = $gajiPerHariDidapat
+            + $tunjanganTransportPerBulanDidapat
+            + $tunjanganMakanPerBulanDidapat
+            + $jabatan->tunjangan_kesehatan
+            + $request->bonus
+            - ($gajiPerHari * ($request->jumlah_hari_kerja - $request->jumlah_hadir)); // Potongan dihitung dari ketidakhadiran
+
+        // Update data gaji
         $gajiKaryawan->update([
             'user_id' => $user->id,
             'jabatan_id' => $jabatan->id,
             'tanggal_gaji' => $request->tanggal_gaji,
+            'jumlah_hari_kerja' => $request->jumlah_hari_kerja,
             'jumlah_hadir' => $request->jumlah_hadir,
-            'jumlah_izin' => $request->jumlah_izin,
-            'jumlah_sakit' => $request->jumlah_sakit,
-            'jumlah_wfh' => $request->jumlah_wfh,
-            'jumlah_alfa' => $request->jumlah_alfa,
             'gaji_pokok' => $jabatan->gajipokok,
+            'gaji_per_hari' => $gajiPerHari,
+            'tunjangan_transport' => $jabatan->tunjangan_transportasi,
+            'tunjangan_makan' => $jabatan->tunjangan_makan,
+            'tunjangan_kesehatan' => $jabatan->tunjangan_kesehatan,
             'bonus' => $request->bonus ?? 0,
-            'potongan' => $request->potongan ?? 0,
-            'total_gaji' => ($jabatan->gajipokok + ($request->bonus ?? 0)) - ($request->potongan ?? 0),
-            'created_by' => Auth::id(),
+            'potongan' => $gajiPerHari * ($request->jumlah_hari_kerja - $request->jumlah_hadir), // Potongan dihitung dari ketidakhadiran
+            'total_gaji' => $totalGaji,
         ]);
 
         return redirect()->route('gaji.index')->with('success', 'Data gaji berhasil diperbarui.');
     }
+
 
     public function destroy($id)
     {

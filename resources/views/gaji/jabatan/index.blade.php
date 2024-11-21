@@ -55,9 +55,6 @@
             </table>
 
             <div class="d-flex justify-content-end align-items-center mt-3">
-                {{-- <p class="mb-0">
-                    Menampilkan {{ $jabatan->firstItem() }} - {{ $jabatan->lastItem() }} dari {{ $jabatan->total() }} data
-                </p> --}}
                 <nav>
                     {{ $jabatan->links('pagination::bootstrap-5') }}
                 </nav>

@@ -41,16 +41,25 @@ class JabatanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_jabatan' => 'required',
-            'gajipokok' => 'required',
+            'nama_jabatan' => 'required|string|max:255',
+            'gajipokok' => 'required|numeric',
+            'tunjangan_jabatan' => 'nullable|numeric',
+            'tunjangan_kesehatan' => 'nullable|numeric',
+            'tunjangan_transportasi' => 'nullable|numeric',
+            'tunjangan_makan' => 'nullable|numeric',
         ], [
             'nama_jabatan.required' => 'Nama jabatan harus diisi',
-            'gajipokok.required' => 'Gaji Pokok harus diisi',
+            'gajipokok.required' => 'Gaji pokok harus diisi',
+            'gajipokok.numeric' => 'Gaji pokok harus berupa angka',
         ]);
 
         Jabatan::create([
             'nama_jabatan' => $request->nama_jabatan,
             'gajipokok' => $request->gajipokok,
+            'tunjangan_jabatan' => $request->tunjangan_jabatan ?? 0,
+            'tunjangan_kesehatan' => $request->tunjangan_kesehatan ?? 0,
+            'tunjangan_transportasi' => $request->tunjangan_transportasi ?? 0,
+            'tunjangan_makan' => $request->tunjangan_makan ?? 0,
         ]);
 
         return redirect()->route('jabatan')->with('success', 'Jabatan berhasil ditambahkan');
@@ -70,7 +79,7 @@ class JabatanController extends Controller
     public function edit($id)
     {
         $jabatan = Jabatan::findOrFail($id);
-        return view('jabatan.edit', compact('jabatan'));
+        return view('gaji.jabatan.edit', compact('jabatan'));
     }
 
     public function update(Request $request, $id)
@@ -78,12 +87,23 @@ class JabatanController extends Controller
         $request->validate([
             'nama_jabatan' => 'required|string|max:255',
             'gajipokok' => 'required|numeric',
+            'tunjangan_jabatan' => 'nullable|numeric',
+            'tunjangan_kesehatan' => 'nullable|numeric',
+            'tunjangan_transportasi' => 'nullable|numeric',
+            'tunjangan_makan' => 'nullable|numeric',
         ]);
 
         $jabatan = Jabatan::findOrFail($id);
-        $jabatan->update($request->only(['nama_jabatan', 'gajipokok']));
+        $jabatan->update([
+            'nama_jabatan' => $request->nama_jabatan,
+            'gajipokok' => $request->gajipokok,
+            'tunjangan_jabatan' => $request->tunjangan_jabatan ?? 0,
+            'tunjangan_kesehatan' => $request->tunjangan_kesehatan ?? 0,
+            'tunjangan_transportasi' => $request->tunjangan_transportasi ?? 0,
+            'tunjangan_makan' => $request->tunjangan_makan ?? 0,
+        ]);
 
-        return redirect()->route('jabatan.index')->with('success', 'Data jabatan berhasil diperbarui!');
+        return redirect()->route('jabatan')->with('success', 'Data jabatan berhasil diperbarui!');
     }
 
 

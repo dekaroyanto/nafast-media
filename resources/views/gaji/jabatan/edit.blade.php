@@ -1,12 +1,13 @@
 @extends('layouts.template')
 
-@section('title', 'Tambah Jabatan')
+@section('title', 'Edit Jabatan')
 
 @section('content')
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('jabatan.store') }}" method="POST">
+            <form action="{{ route('jabatan.update', $jabatan->id) }}" method="POST">
                 @csrf
+                @method('PUT')
                 <div class="form-body">
                     <div class="row">
                         <div class="col-md-4">
@@ -14,7 +15,7 @@
                         </div>
                         <div class="col-md-8 form-group">
                             <input type="text" id="nama_jabatan" class="form-control" name="nama_jabatan"
-                                placeholder="Nama Jabatan" required>
+                                value="{{ $jabatan->nama_jabatan }}" placeholder="Nama Jabatan" required>
                         </div>
 
                         <div class="col-md-4">
@@ -22,7 +23,7 @@
                         </div>
                         <div class="col-md-8 form-group">
                             <input type="number" id="gajipokok" class="form-control" name="gajipokok"
-                                placeholder="Gaji Pokok" required>
+                                value="{{ $jabatan->gajipokok }}" placeholder="Gaji Pokok" required>
                         </div>
 
                         <div class="col-md-4">
@@ -30,7 +31,7 @@
                         </div>
                         <div class="col-md-8 form-group">
                             <input type="number" id="tunjangan_jabatan" class="form-control" name="tunjangan_jabatan"
-                                placeholder="Tunjangan Jabatan">
+                                value="{{ $jabatan->tunjangan_jabatan }}" placeholder="Tunjangan Jabatan">
                         </div>
 
                         <div class="col-md-4">
@@ -38,7 +39,7 @@
                         </div>
                         <div class="col-md-8 form-group">
                             <input type="number" id="tunjangan_kesehatan" class="form-control" name="tunjangan_kesehatan"
-                                placeholder="Tunjangan Kesehatan">
+                                value="{{ $jabatan->tunjangan_kesehatan }}" placeholder="Tunjangan Kesehatan">
                         </div>
 
                         <div class="col-md-4">
@@ -46,7 +47,8 @@
                         </div>
                         <div class="col-md-8 form-group">
                             <input type="number" id="tunjangan_transportasi" class="form-control"
-                                name="tunjangan_transportasi" placeholder="Tunjangan Transportasi">
+                                name="tunjangan_transportasi" value="{{ $jabatan->tunjangan_transportasi }}"
+                                placeholder="Tunjangan Transportasi">
                         </div>
 
                         <div class="col-md-4">
@@ -54,12 +56,12 @@
                         </div>
                         <div class="col-md-8 form-group">
                             <input type="number" id="tunjangan_makan" class="form-control" name="tunjangan_makan"
-                                placeholder="Tunjangan Makan">
+                                value="{{ $jabatan->tunjangan_makan }}" placeholder="Tunjangan Makan">
                         </div>
 
                         <div class="col-sm-12 d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary me-1 mb-1">Submit</button>
-                            <button type="reset" class="btn btn-light-secondary me-1 mb-1">Reset</button>
+                            <button type="submit" class="btn btn-primary me-1 mb-1">Simpan Perubahan</button>
+                            <a href="{{ route('jabatan') }}" class="btn btn-secondary me-1 mb-1">Batal</a>
                         </div>
                     </div>
                 </div>

@@ -38,8 +38,8 @@ Route::middleware(['auth', 'role:admin', 'check.ip'])->group(function () {
     Route::get('/jabatan', [JabatanController::class, 'index'])->name('jabatan');
     Route::get('/jabatan/tambah', [JabatanController::class, 'create'])->name('jabatan.create');
     Route::post('/jabatan/store', [JabatanController::class, 'store'])->name('jabatan.store');
-    Route::get('/jabatan/edit', [JabatanController::class, 'edit'])->name('jabatan.edit');
-    Route::post('/jabatan/update', [JabatanController::class, 'update'])->name('jabatan.update');
+    Route::get('/jabatan/{id}/edit', [JabatanController::class, 'edit'])->name('jabatan.edit');
+    Route::put('/jabatan/{id}', [JabatanController::class, 'update'])->name('jabatan.update');
     Route::delete('/jabatan/{id}', [JabatanController::class, 'destroy'])->name('jabatan.destroy');
 
     Route::get('/presensikaryawan', [PresensiController::class, 'indexadmin'])->name('presensikaryawan');

@@ -14,11 +14,30 @@ class JabatanSeeder extends Seeder
     public function run(): void
     {
         $jabatans = [
-            ['nama_jabatan' => 'Manager', 'gajipokok' => 15000000],
-            ['nama_jabatan' => 'Admin', 'gajipokok' => 1800000],
-            ['nama_jabatan' => 'Supervisor', 'gajipokok' => 10000000],
-            ['nama_jabatan' => 'Staff', 'gajipokok' => 7000000],
-            ['nama_jabatan' => 'Operator', 'gajipokok' => 5000000],
+            [
+                'nama_jabatan' => 'Admin',
+                'gajipokok' => 0,
+                'tunjangan_jabatan' => 0,
+                'tunjangan_kesehatan' => 0,
+                'tunjangan_transportasi' => 0,
+                'tunjangan_makan' => 0,
+            ],
+            [
+                'nama_jabatan' => 'CS',
+                'gajipokok' => 1270000,
+                'tunjangan_jabatan' => 0,
+                'tunjangan_kesehatan' => 150000,
+                'tunjangan_transportasi' => 20000,
+                'tunjangan_makan' => 20000,
+            ],
+            [
+                'nama_jabatan' => 'Creative',
+                'gajipokok' => 1500000,
+                'tunjangan_jabatan' => 0,
+                'tunjangan_kesehatan' => 150000,
+                'tunjangan_transportasi' => 20000,
+                'tunjangan_makan' => 20000,
+            ],
         ];
 
         DB::table('jabatans')->insert($jabatans);

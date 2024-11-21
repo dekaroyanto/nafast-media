@@ -21,26 +21,26 @@ class UserSeeder extends Seeder
             'password' => Hash::make('admin'),
             'role' => 'admin',
             'status' => 'active',
-            'jabatan_id' => 2,
-        ]);
-
-        User::create([
-            'name' => 'Karyawan',
-            'email' => 'karyawan@gmail.com',
-            'username' => 'karyawan',
-            'password' => Hash::make('karyawan'),
-            'role' => 'karyawan',
-            'status' => 'active',
             'jabatan_id' => 1,
         ]);
 
         User::create([
-            'name' => 'Karyawan Dua',
-            'email' => 'karyawan2@gmail.com',
-            'username' => 'karyawan2',
-            'password' => Hash::make('karyawan2'),
+            'name' => 'Maryam',
+            'email' => 'maryam@gmail.com',
+            'username' => 'maryam',
+            'password' => Hash::make('karyawan'),
             'role' => 'karyawan',
-            'status' => 'inactive',
+            'status' => 'active',
+            'jabatan_id' => 2,
+        ]);
+
+        User::create([
+            'name' => 'Ansel',
+            'email' => 'ansel@gmail.com',
+            'username' => 'ansel',
+            'password' => Hash::make('karyawan'),
+            'role' => 'karyawan',
+            'status' => 'active',
             'jabatan_id' => 3,
         ]);
     }

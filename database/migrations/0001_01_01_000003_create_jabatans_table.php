@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('nama_jabatan');
             $table->bigInteger('gajipokok');
+            $table->bigInteger('tunjangan_jabatan')->default(0);      // Kolom baru
+            $table->bigInteger('tunjangan_kesehatan')->default(0);    // Kolom baru
+            $table->bigInteger('tunjangan_transportasi')->default(0); // Kolom baru
+            $table->bigInteger('tunjangan_makan')->default(0);        // Kolom baru
             $table->timestamps();
         });
     }
