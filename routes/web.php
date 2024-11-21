@@ -45,6 +45,9 @@ Route::middleware(['auth', 'role:admin', 'check.ip'])->group(function () {
     Route::get('/presensikaryawan', [PresensiController::class, 'indexadmin'])->name('presensikaryawan');
     Route::get('/presensi/admin/create', [PresensiController::class, 'createByAdmin'])->name('admin.presensi.create');
     Route::post('/presensi/admin/store', [PresensiController::class, 'storeByAdmin'])->name('admin.presensi.store');
+    Route::get('/presensi/{id}/edit', [PresensiController::class, 'edit'])->name('admin.presensi.edit');
+    Route::put('/presensi/{id}', [PresensiController::class, 'update'])->name('admin.presensi.update');
+    Route::delete('/presensi/{id}', [PresensiController::class, 'destroy'])->name('admin.presensi.destroy');
 
 
     Route::get('gaji', [GajiKaryawanController::class, 'index'])->name('gaji.index');

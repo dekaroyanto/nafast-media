@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
 
-class CheckCompanyIP
+class CheckCompanyIPs
 {
     /**
      * Daftar IP yang diizinkan untuk mengakses aplikasi.
@@ -38,7 +38,7 @@ class CheckCompanyIP
     }
 }
 
-class CheckCompanyIPs
+class CheckCompanyIP
 {
     /**
      * IP dasar yang diizinkan untuk mengakses aplikasi.

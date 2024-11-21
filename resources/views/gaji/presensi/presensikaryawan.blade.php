@@ -28,7 +28,7 @@
                     </div>
                     <div class="col-md-2 d-flex align-items-end gap-2">
                         <button type="submit" class="btn btn-primary">Cari.....</button>
-                        <a href="{{ route('presensikaryawan') }}" class="btn btn-secondary w-100">Reset</a>
+                        <a href="{{ route('presensikaryawan') }}" type="button" class="btn btn-secondary w-100">Reset</a>
                     </div>
                 </div>
             </form>
@@ -37,13 +37,14 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Tanggal</th>
-                            <th>Nama Karyawan</th>
-                            <th>Jabatan</th>
-                            <th>Waktu Datang</th>
-                            <th>Waktu Pulang</th>
-                            <th>Lama Jam Kerja</th>
-                            <th>Status Kehadiran</th>
+                            <th class="text-center">Tanggal</th>
+                            <th class="text-center">Nama Karyawan</th>
+                            <th class="text-center">Jabatan</th>
+                            <th class="text-center">Waktu Datang</th>
+                            <th class="text-center">Waktu Pulang</th>
+                            <th class="text-center">Lama Jam Kerja</th>
+                            <th class="text-center">Status Kehadiran</th>
+                            <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -51,19 +52,34 @@
                             <tr>
                                 <td>{{ \Carbon\Carbon::parse($presensi->datang)->translatedFormat('d F Y') }}</td>
                                 <td>{{ $presensi->user->name }}</td>
-                                <td>{{ $presensi->user->jabatan->nama_jabatan ?? 'Belum diatur' }}</td>
-                                <td>{{ \Carbon\Carbon::parse($presensi->datang)->format('H:i:s') }}</td>
-                                <td>{{ $presensi->pulang ? \Carbon\Carbon::parse($presensi->pulang)->format('H:i:s') : '-' }}
+                                <td class="text-center">{{ $presensi->user->jabatan->nama_jabatan ?? 'Belum diatur' }}</td>
+                                <td class="text-center">{{ \Carbon\Carbon::parse($presensi->datang)->format('H:i:s') }}</td>
+                                <td class="text-center">
+                                    {{ $presensi->pulang ? \Carbon\Carbon::parse($presensi->pulang)->format('H:i:s') : '-' }}
                                 </td>
-                                <td>{{ $presensi->lama_jam_kerja ?? '-' }}</td>
-                                <td>{{ $presensi->status_kehadiran }}</td>
+                                <td class="text-center">{{ $presensi->lama_jam_kerja ?? '-' }}</td>
+                                <td class="text-center">{{ $presensi->status_kehadiran }}</td>
+                                <td style="display: flex; gap: 5px">
+                                    <a href="{{ route('admin.presensi.edit', $presensi->id) }}"
+                                        class="btn btn-warning btn-sm">Edit</a>
+                                    <button class="btn btn-danger btn-sm"
+                                        onclick="confirmDelete({{ $presensi->id }})">Hapus</button>
+
+                                    <form id="delete-form-{{ $presensi->id }}"
+                                        action="{{ route('admin.presensi.destroy', $presensi->id) }}" method="POST"
+                                        style="display: none;">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center">Belum ada data presensi.</td>
+                                <td colspan="8" class="text-center">Belum ada data presensi.</td>
                             </tr>
                         @endforelse
                     </tbody>
+
                 </table>
             </div>
             <!-- Pagination -->
@@ -72,4 +88,22 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'Yakin ingin menghapus?',
+                text: "Data ini tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(`delete-form-${id}`).submit();
+                }
+            });
+        }
+    </script>
 @endsection

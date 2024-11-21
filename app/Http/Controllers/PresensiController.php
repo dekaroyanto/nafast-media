@@ -192,24 +192,43 @@ class PresensiController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Presensi $presensi)
+    public function edit($id)
     {
-        //
+        $presensi = Presensi::with('user.jabatan')->findOrFail($id);
+        $karyawan = User::where('role', 'karyawan')->get();
+        return view('gaji.presensi.edit-presensi', compact('presensi', 'karyawan'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Presensi $presensi)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'tanggal_presensi' => 'required|date',
+            'user_id' => 'required|exists:users,id',
+            'status_kehadiran' => 'required|in:izin,sakit,wfh,alfa,hadir',
+        ]);
+
+        $presensi = Presensi::findOrFail($id);
+        $presensi->update([
+            'user_id' => $request->user_id,
+            'datang' => Carbon::parse($request->tanggal_presensi),
+            'status_kehadiran' => $request->status_kehadiran,
+        ]);
+
+        return redirect()->route('presensikaryawan')->with('success', 'Data presensi berhasil diperbarui.');
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Presensi $presensi)
+    public function destroy($id)
     {
-        //
+        $presensi = Presensi::findOrFail($id);
+        $presensi->delete();
+
+        return redirect()->route('presensikaryawan')->with('success', 'Data presensi berhasil dihapus.');
     }
 }
