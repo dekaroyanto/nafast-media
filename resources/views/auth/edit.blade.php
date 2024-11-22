@@ -14,6 +14,16 @@
                     required>
             </div>
             <div class="mb-3">
+                <label for="name" class="form-label">No Rekening</label>
+                <input type="number" class="form-control" id="norek" name="norek"
+                    value="{{ old('norek', $user->norek) }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="name" class="form-label">Bank</label>
+                <input type="text" class="form-control" id="bank" name="bank"
+                    value="{{ old('bank', $user->bank) }}" required>
+            </div>
+            <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input type="email" class="form-control" id="email" name="email"
                     value="{{ old('email', $user->email) }}" required>

@@ -25,7 +25,7 @@
                                 placeholder="Gaji Pokok" required>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-4" hidden>
                             <label for="tunjangan_jabatan">Tunjangan Jabatan</label>
                         </div>
                         <div class="col-md-8 form-group">

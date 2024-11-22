@@ -58,8 +58,6 @@
                             <input type="number" id="jumlah_hari_kerja" name="jumlah_hari_kerja" class="form-control"
                                 value="0" required>
                         </div>
-                    </div>
-                    <div class="col-md-6">
                         <div class="mb-3">
                             <label for="jumlah_hadir" class="form-label">Jumlah Hadir</label>
                             <input type="number" id="jumlah_hadir" name="jumlah_hadir" class="form-control" value="0">
@@ -73,6 +71,28 @@
                             <input type="text" id="gaji_per_hari_didapat" name="gaji_per_hari_didapat"
                                 class="form-control" readonly>
                         </div>
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="mb-3">
+                            <label for="jumlah_izin" class="form-label">Jumlah Izin</label>
+                            <input type="number" id="jumlah_izin" name="jumlah_izin" class="form-control" readonly>
+                        </div>
+                        <!-- Input Jumlah Sakit -->
+                        <div class="mb-3">
+                            <label for="jumlah_sakit" class="form-label">Jumlah Sakit</label>
+                            <input type="number" id="jumlah_sakit" name="jumlah_sakit" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="jumlah_wfh" class="form-label">Jumlah WFH</label>
+                            <input type="number" id="jumlah_wfh" name="jumlah_wfh" class="form-control" readonly>
+                        </div>
+                        <!-- Input Jumlah Alfa -->
+                        <div class="mb-3">
+                            <label for="jumlah_alfa" class="form-label">Jumlah Alfa</label>
+                            <input type="number" id="jumlah_alfa" name="jumlah_alfa" class="form-control" readonly>
+                        </div>
+
                         <div class="mb-3">
                             <label for="tunjangan_transport_didapat" class="form-label">Tunjangan Transportasi
                                 Didapat</label>
@@ -124,6 +144,10 @@
                     .then(response => response.json())
                     .then(data => {
                         document.getElementById('jumlah_hadir').value = data.jumlah_hadir || 0;
+                        document.getElementById('jumlah_izin').value = data.jumlah_izin || 0;
+                        document.getElementById('jumlah_sakit').value = data.jumlah_sakit || 0;
+                        document.getElementById('jumlah_wfh').value = data.jumlah_wfh || 0;
+                        document.getElementById('jumlah_alfa').value = data.jumlah_alfa || 0;
                         calculateAll();
                     })
                     .catch(error => console.error('Error fetching presensi:', error));

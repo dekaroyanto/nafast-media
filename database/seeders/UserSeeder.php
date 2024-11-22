@@ -16,6 +16,8 @@ class UserSeeder extends Seeder
     {
         User::create([
             'name' => 'Admin',
+            'norek' => 123456789,
+            'bank' => 'BCA',
             'email' => 'admin@gmail.com',
             'username' => 'admin',
             'password' => Hash::make('admin'),
@@ -26,6 +28,8 @@ class UserSeeder extends Seeder
 
         User::create([
             'name' => 'Maryam',
+            'norek' => 333333333,
+            'bank' => 'BRI',
             'email' => 'maryam@gmail.com',
             'username' => 'maryam',
             'password' => Hash::make('karyawan'),
@@ -36,6 +40,8 @@ class UserSeeder extends Seeder
 
         User::create([
             'name' => 'Ansel',
+            'norek' => 44444444,
+            'bank' => 'BNI',
             'email' => 'ansel@gmail.com',
             'username' => 'ansel',
             'password' => Hash::make('karyawan'),

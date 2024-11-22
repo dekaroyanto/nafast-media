@@ -62,7 +62,7 @@
                             <th>Nama Karyawan</th>
                             <th>Tanggal Gaji</th>
                             <th>Jumlah Hadir</th>
-                            <th>Gaji Pokok</th>
+                            <th>Total Gaji</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -73,7 +73,7 @@
                                 {{-- <td>{{ $gaji->tanggal_gaji->format('d M Y') }}</td> --}}
                                 <td>{{ \Carbon\Carbon::parse($gaji->tanggal_gaji)->translatedFormat('d F Y') }}</td>
                                 <td>{{ $gaji->jumlah_hadir }}</td>
-                                <td>Rp {{ number_format($gaji->gaji_pokok, 2, ',', '.') }}</td>
+                                <td>Rp {{ number_format($gaji->total_gaji, 2, ',', '.') }}</td>
                             </tr>
                         @endforeach
                     </tbody>

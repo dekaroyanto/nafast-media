@@ -16,8 +16,14 @@ class DashboardController extends Controller
     public function index()
     {
         $gajiKaryawan = GajiKaryawan::with('user')->paginate(5);
-        $totalGaji = GajiKaryawan::whereDate('tanggal_gaji', now()->toDateString())->sum('total_gaji');
+
+        // Hitung total gaji hanya untuk bulan dan tahun saat ini
+        $totalGaji = GajiKaryawan::whereYear('tanggal_gaji', now()->year)
+            ->whereMonth('tanggal_gaji', now()->month)
+            ->sum('total_gaji');
+
         $userCount = User::count();
+
         return view('gaji.dashboard.index', compact('gajiKaryawan', 'userCount', 'totalGaji'));
     }
 }

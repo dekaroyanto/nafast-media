@@ -33,18 +33,28 @@
                             @csrf
                             <div class="form-group">
                                 <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                <input type="text" name="name" id="name" placeholder="Your Name"
+                                <input type="text" name="name" id="name" placeholder="Nama Lengkap"
                                     value="{{ old('name') }}" />
                             </div>
                             <div class="form-group">
+                                <label for="name"><i class="zmdi zmdi-balance-wallet"></i></label>
+                                <input type="number" name="norek" id="norek" placeholder="No Rekening"
+                                    value="{{ old('norek') }}" />
+                            </div>
+                            <div class="form-group">
+                                <label for="name"><i class="zmdi zmdi-store-24"></i></label>
+                                <input type="text" name="bank" id="bank" placeholder="Bank"
+                                    value="{{ old('bank') }}" />
+                            </div>
+                            <div class="form-group">
                                 <label for="email"><i class="zmdi zmdi-email"></i></label>
-                                <input type="email" name="email" id="email" placeholder="Your Email"
+                                <input type="email" name="email" id="email" placeholder="Alamat Email"
                                     value="{{ old('email') }}" />
                             </div>
 
                             <div class="form-group">
                                 <label for="username"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                <input type="text" name="username" id="username" placeholder="Your Username"
+                                <input type="text" name="username" id="username" placeholder="Username"
                                     value="{{ old('username') }}" />
                             </div>
 

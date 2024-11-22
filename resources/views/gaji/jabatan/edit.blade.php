@@ -26,10 +26,10 @@
                                 value="{{ $jabatan->gajipokok }}" placeholder="Gaji Pokok" required>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-4" hidden>
                             <label for="tunjangan_jabatan">Tunjangan Jabatan</label>
                         </div>
-                        <div class="col-md-8 form-group">
+                        <div class="col-md-8 form-group" hidden>
                             <input type="number" id="tunjangan_jabatan" class="form-control" name="tunjangan_jabatan"
                                 value="{{ $jabatan->tunjangan_jabatan }}" placeholder="Tunjangan Jabatan">
                         </div>

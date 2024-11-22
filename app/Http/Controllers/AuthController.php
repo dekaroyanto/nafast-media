@@ -48,6 +48,8 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'norek' => 'required|numeric',
+            'bank' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'username' => 'required|string|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
@@ -55,6 +57,12 @@ class AuthController extends Controller
             'name.required' => 'Nama harus diisi.',
             'name.string' => 'Nama harus berupa teks.',
             'name.max' => 'Nama tidak boleh lebih dari 255 karakter.',
+
+            'norek.required' => 'Nomor rekening harus diisi.',
+            'norek.numeric' => 'Nomor rekening harus berupa angka.',
+
+            'bank.required' => 'Bank harus diisi.',
+            'bank.string' => 'Bank harus berupa teks.',
 
             'email.required' => 'Email harus diisi.',
             'email.string' => 'Email harus berupa teks.',
@@ -75,6 +83,8 @@ class AuthController extends Controller
 
         User::create([
             'name' => $request->name,
+            'norek' => $request->norek,
+            'bank' => $request->bank,
             'email' => $request->email,
             'username' => $request->username,
             'password' => Hash::make($request->password),
@@ -96,6 +106,8 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'norek' => 'required|numeric',
+            'bank' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . Auth::id(),
             'username' => 'required|string|max:255|unique:users,username,' . Auth::id(),
         ]);
@@ -104,6 +116,8 @@ class AuthController extends Controller
 
         if ($user instanceof User) {
             $user->name = $request->name;
+            $user->norek = $request->norek;
+            $user->bank = $request->bank;
             $user->email = $request->email;
             $user->username = $request->username;
             $user->save();
