@@ -58,6 +58,8 @@ Route::middleware(['auth', 'role:admin', 'check.ip'])->group(function () {
     Route::put('/gaji/{id}', [GajiKaryawanController::class, 'update'])->name('gaji.update');
     Route::delete('/gaji/{id}', [GajiKaryawanController::class, 'destroy'])->name('gaji.destroy');
 
+    Route::get('/gaji/print', [GajiKaryawanController::class, 'printAll'])->name('gaji.printAll');
+
     Route::get('/inventaris', [InventarisController::class, 'index'])->name('inventaris');
 });
 
@@ -65,6 +67,10 @@ Route::middleware(['auth', 'role:admin', 'check.ip'])->group(function () {
 Route::middleware(['auth', 'role:karyawan', 'check.ip'])->group(function () {
     Route::get('/presensi', [PresensiController::class, 'index'])->name('presensi');
     Route::post('/presensi', [PresensiController::class, 'store'])->name('presensi.store');
+
+    Route::get('/gaji/my', [GajiKaryawanController::class, 'myGaji'])->name('gaji.my');
+
+    Route::get('/gaji/print/my', [GajiKaryawanController::class, 'printMine'])->name('gaji.printMine');
 });
 
 Route::middleware(['auth', 'check.ip'])->group(function () {

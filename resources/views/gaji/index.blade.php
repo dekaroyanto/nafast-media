@@ -32,6 +32,9 @@
                     </div>
                 </form>
 
+                <a href="{{ route('gaji.printAll', request()->all()) }}" class="btn btn-secondary mb-3"
+                    target="_blank">Print Semua Data</a>
+
                 <!-- Tabel Data Gaji -->
                 <div class="table-responsive">
                     <table class="table table-striped">
@@ -41,6 +44,12 @@
                                 <th>Nama Karyawan</th>
                                 <th>Tanggal Gaji</th>
                                 <th>Jabatan</th>
+                                <th>Hari Kerja</th>
+                                <th>Jumlah Hadir</th>
+                                <th>Jumlah Izin</th>
+                                <th>Jumlah Sakit</th>
+                                <th>Jumlah WFH</th>
+                                <th>Jumlah Alfa</th>
                                 <th>Total Gaji</th>
                                 <th>Diinput Oleh</th>
                                 <th>Aksi</th>
@@ -53,6 +62,12 @@
                                     <td>{{ $gaji->user->name }}</td>
                                     <td>{{ \Carbon\Carbon::parse($gaji->tanggal_gaji)->translatedFormat('d F Y') }}</td>
                                     <td>{{ $gaji->user->jabatan->nama_jabatan }}</td>
+                                    <td>{{ $gaji->hari_kerja }}</td>
+                                    <td>{{ $gaji->jumlah_hadir }}</td>
+                                    <td>{{ $gaji->jumlah_izin }}</td>
+                                    <td>{{ $gaji->jumlah_sakit }}</td>
+                                    <td>{{ $gaji->jumlah_wfh }}</td>
+                                    <td>{{ $gaji->jumlah_alfa }}</td>
                                     <td>Rp {{ number_format($gaji->total_gaji, 2, ',', '.') }}</td>
                                     <td>{{ $gaji->createdBy->name ?? 'N/A' }}</td>
                                     <td style="display: flex; gap: 5px">
@@ -71,7 +86,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="text-center">Data tidak ditemukan.</td>
+                                    <td colspan="13" class="text-center">Data tidak ditemukan.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -102,4 +117,6 @@
             });
         }
     </script>
+
+
 @endsection

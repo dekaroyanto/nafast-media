@@ -34,6 +34,24 @@ class GajiKaryawanController extends Controller
         return view('gaji.index', compact('gajiKaryawan'));
     }
 
+    public function myGaji(Request $request)
+    {
+        $user = Auth::user();
+
+        // Ambil data gaji hanya untuk user yang login
+        $query = GajiKaryawan::with(['user.jabatan'])
+            ->where('user_id', $user->id);
+
+        // Filter berdasarkan rentang tanggal
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $query->whereBetween('tanggal_gaji', [$request->start_date, $request->end_date]);
+        }
+
+        $gajiKaryawan = $query->paginate(10);
+
+        return view('gaji.my-gaji', compact('gajiKaryawan', 'user'));
+    }
+
     public function create()
     {
         $karyawan = User::with('jabatan')->get(); // Ambil data karyawan beserta jabatan
@@ -172,5 +190,43 @@ class GajiKaryawanController extends Controller
     {
         GajiKaryawan::findOrFail($id)->delete();
         return redirect()->route('gaji.index')->with('success', 'Data gaji berhasil dihapus.');
+    }
+
+    public function printAll(Request $request)
+    {
+        $query = GajiKaryawan::with(['user', 'user.jabatan']);
+
+        // Filter berdasarkan tanggal
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $query->whereBetween('tanggal_gaji', [$request->start_date, $request->end_date]);
+        } else {
+            // Default ke bulan saat ini
+            $query->whereMonth('tanggal_gaji', now()->month)
+                ->whereYear('tanggal_gaji', now()->year);
+        }
+
+        $gajiKaryawan = $query->get();
+
+        return view('gaji.print.all', compact('gajiKaryawan'));
+    }
+
+    public function printMine(Request $request)
+    {
+        $user = Auth::user();
+        $query = GajiKaryawan::with(['user.jabatan'])
+            ->where('user_id', $user->id);
+
+        // Filter berdasarkan tanggal
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $query->whereBetween('tanggal_gaji', [$request->start_date, $request->end_date]);
+        } else {
+            // Default ke bulan saat ini
+            $query->whereMonth('tanggal_gaji', now()->month)
+                ->whereYear('tanggal_gaji', now()->year);
+        }
+
+        $gajiKaryawan = $query->get();
+
+        return view('gaji.print.mine', compact('gajiKaryawan', 'user'));
     }
 }

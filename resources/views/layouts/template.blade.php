@@ -137,6 +137,13 @@
                                     <span>Presensi</span>
                                 </a>
                             </li>
+
+                            <li class="sidebar-item {{ Request::is('gaji/my') ? 'active' : '' }}">
+                                <a href="{{ route('gaji.my') }}" class="sidebar-link">
+                                    <i class="bi bi-cash"></i>
+                                    <span>Gaji Saya</span>
+                                </a>
+                            </li>
                         @endif
 
                         <li class="sidebar-item {{ Request::is('laporan') ? 'active' : '' }}">
