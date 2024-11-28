@@ -26,6 +26,7 @@
                 <div class="mb-3">
                     <label for="status_kehadiran" class="form-label">Status Kehadiran</label>
                     <select id="status_kehadiran" name="status_kehadiran" class="form-control" required>
+                        <option value="hadir">Hadir</option>
                         <option value="izin">Izin</option>
                         <option value="sakit">Sakit</option>
                         <option value="wfh">WFH</option>

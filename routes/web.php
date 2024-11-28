@@ -8,6 +8,7 @@ use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventarisController;
 use App\Http\Controllers\GajiKaryawanController;
+use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\LaporanKaryawanController;
 
 Route::get('/', function () {
@@ -22,8 +23,13 @@ Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::get('/forgot-password', [PasswordResetController::class, 'showForgotPasswordForm'])->name('password.request');
+Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink'])->name('password.email');
+Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetPasswordForm'])->name('password.reset');
+Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->name('password.update');
 
-Route::middleware(['auth', 'role:admin', 'check.ip'])->group(function () {
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/menu', [DashboardController::class, 'menu'])->name('menu');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

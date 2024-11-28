@@ -1,9 +1,14 @@
 @extends('layouts.template')
 
 @section('content')
+    <form action="{{ route('admin.presensi.ingatkan') }}" method="POST" class="mb-4">
+        @csrf
+        <button type="submit" class="btn btn-primary">Ingatkan Presensi</button>
+    </form>
     <div class="card mt-4">
         <div class="card-header">
             <h2>Riwayat Presensi</h2>
+
         </div>
         <div class="card-body">
             <a href="{{ route('admin.presensi.create') }}" class="btn btn-primary mb-4">Tambah Presensi</a>
@@ -53,7 +58,8 @@
                                 <td>{{ \Carbon\Carbon::parse($presensi->datang)->translatedFormat('d F Y') }}</td>
                                 <td>{{ $presensi->user->name }}</td>
                                 <td class="text-center">{{ $presensi->user->jabatan->nama_jabatan ?? 'Belum diatur' }}</td>
-                                <td class="text-center">{{ \Carbon\Carbon::parse($presensi->datang)->format('H:i:s') }}</td>
+                                <td class="text-center">{{ \Carbon\Carbon::parse($presensi->datang)->format('H:i:s') }}
+                                </td>
                                 <td class="text-center">
                                     {{ $presensi->pulang ? \Carbon\Carbon::parse($presensi->pulang)->format('H:i:s') : '-' }}
                                 </td>
@@ -84,7 +90,7 @@
             </div>
             <!-- Pagination -->
             <div class="d-flex justify-content-end">
-                {{ $riwayatPresensi->links('pagination::bootstrap-5') }}
+                {{ $riwayatPresensi->appends(request()->query())->links('pagination::bootstrap-5') }}
             </div>
         </div>
     </div>

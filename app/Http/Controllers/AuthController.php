@@ -31,8 +31,8 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             return $user->role === 'admin'
-                ? redirect()->route('menu')
-                : redirect()->route('presensi');
+                ? redirect()->route('dashboard')
+                : redirect()->route('profile.edit');
         }
 
         return back()->with('error', 'Username atau password salah.');

@@ -40,7 +40,11 @@
                     </div>
                 </div>
                 <button type="submit" class="btn">Login</button>
-                <a href="{{ route('register') }}">Create an account</a>
+                <div class="d-flex">
+
+                    <a href="{{ route('register') }}">Create an account</a>
+                    <a href="{{ route('password.request') }}">Forgot password</a>
+                </div>
             </form>
 
 

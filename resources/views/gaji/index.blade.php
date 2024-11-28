@@ -61,7 +61,7 @@
                                     <td>{{ $gajiKaryawan->firstItem() + $index }}</td>
                                     <td>{{ $gaji->user->name }}</td>
                                     <td>{{ \Carbon\Carbon::parse($gaji->tanggal_gaji)->translatedFormat('d F Y') }}</td>
-                                    <td>{{ $gaji->user->jabatan->nama_jabatan }}</td>
+                                    <td>{{ $gaji->jabatan->nama_jabatan }}</td>
                                     <td>{{ $gaji->hari_kerja }}</td>
                                     <td>{{ $gaji->jumlah_hadir }}</td>
                                     <td>{{ $gaji->jumlah_izin }}</td>

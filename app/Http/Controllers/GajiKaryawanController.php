@@ -69,18 +69,21 @@ class GajiKaryawanController extends Controller
             'jumlah_sakit' => 'nullable|integer|min:0',
             'jumlah_wfh' => 'nullable|integer|min:0',
             'jumlah_alfa' => 'nullable|integer|min:0',
+            'bonus' => 'nullable|numeric|min:0',
+            'bonus_kinerja' => 'nullable|numeric|min:0',
+            'potongan' => 'nullable|numeric|min:0',
         ]);
 
         $user = User::findOrFail($request->user_id);
         $jabatan = $user->jabatan;
 
         $gajiPerHari = ceil($jabatan->gajipokok / $request->jumlah_hari_kerja);
-        $gajiPerHariDidapat = $gajiPerHari * $request->jumlah_hadir;
+        $gajiPerHariDidapat = ($gajiPerHari * $request->jumlah_hadir) + ($gajiPerHari * $request->jumlah_wfh);
 
         $tunjanganTransportDidapat = $jabatan->tunjangan_transportasi * $request->jumlah_hadir;
         $tunjanganMakanDidapat = $jabatan->tunjangan_makan * $request->jumlah_hadir;
 
-        $totalGaji = $gajiPerHariDidapat + $request->bonus + $tunjanganTransportDidapat + $tunjanganMakanDidapat + $jabatan->tunjangan_kesehatan - $request->potongan;
+        $totalGaji = $gajiPerHariDidapat + $request->bonus + $request->bonus_kinerja + $tunjanganTransportDidapat + $tunjanganMakanDidapat + $jabatan->tunjangan_kesehatan - $request->potongan;
 
         GajiKaryawan::create([
             'user_id' => $user->id,
@@ -88,20 +91,19 @@ class GajiKaryawanController extends Controller
             'tanggal_gaji' => $request->tanggal_gaji,
             'jumlah_hadir' => $request->jumlah_hadir,
             'jumlah_hari_kerja' => $request->jumlah_hari_kerja,
-            'jumlah_izin' => $request->jumlah_izin,
-            'jumlah_sakit' => $request->jumlah_sakit,
-            'jumlah_wfh' => $request->jumlah_wfh,
-            'jumlah_alfa' => $request->jumlah_alfa,
+            'jumlah_izin' => $request->jumlah_izin ?? 0,
+            'jumlah_sakit' => $request->jumlah_sakit ?? 0,
+            'jumlah_wfh' => $request->jumlah_wfh ?? 0,
+            'jumlah_alfa' => $request->jumlah_alfa ?? 0,
             'gaji_pokok' => $jabatan->gajipokok,
             'gaji_per_hari' => $gajiPerHari,
             'gaji_per_hari_didapat' => $gajiPerHariDidapat,
-            'tunjangan_transportasi' => $jabatan->tunjangan_transportasi,
             'tunjangan_transport_didapat' => $tunjanganTransportDidapat,
-            'tunjangan_makan' => $jabatan->tunjangan_makan,
             'tunjangan_makan_didapat' => $tunjanganMakanDidapat,
             'tunjangan_kesehatan' => $jabatan->tunjangan_kesehatan,
-            'bonus' => $request->bonus,
-            'potongan' => $request->potongan,
+            'bonus' => $request->bonus ?? 0,
+            'bonus_kinerja' => $request->bonus_kinerja ?? 0,
+            'potongan' => $request->potongan ?? 0,
             'total_gaji' => $totalGaji,
             'created_by' => Auth::id(),
         ]);
@@ -138,6 +140,7 @@ class GajiKaryawanController extends Controller
             'jumlah_wfh' => 'nullable|integer|min:0',
             'jumlah_alfa' => 'nullable|integer|min:0',
             'bonus' => 'nullable|numeric|min:0',
+            'bonus_kinerja' => 'nullable|numeric|min:0',
             'potongan' => 'nullable|numeric|min:0',
         ]);
 
@@ -145,14 +148,16 @@ class GajiKaryawanController extends Controller
         $user = User::findOrFail($request->user_id);
         $jabatan = $user->jabatan;
 
+        // Perhitungan gaji
         $gajiPerHari = ceil($jabatan->gajipokok / $request->jumlah_hari_kerja);
-        $gajiPerHariDidapat = $gajiPerHari * $request->jumlah_hadir;
+        $gajiPerHariDidapat = ($gajiPerHari * $request->jumlah_hadir) + ($gajiPerHari * $request->jumlah_wfh);
 
         $tunjanganTransportDidapat = $jabatan->tunjangan_transportasi * $request->jumlah_hadir;
         $tunjanganMakanDidapat = $jabatan->tunjangan_makan * $request->jumlah_hadir;
 
-        $totalGaji = $gajiPerHariDidapat + $request->bonus + $tunjanganTransportDidapat + $tunjanganMakanDidapat + $jabatan->tunjangan_kesehatan - $request->potongan;
+        $totalGaji = $gajiPerHariDidapat + $request->bonus + $request->bonus_kinerja + $tunjanganTransportDidapat + $tunjanganMakanDidapat + $jabatan->tunjangan_kesehatan - $request->potongan;
 
+        // Update data gaji
         $gajiKaryawan->update([
             'user_id' => $user->id,
             'jabatan_id' => $jabatan->id,
@@ -170,6 +175,7 @@ class GajiKaryawanController extends Controller
             'tunjangan_makan_didapat' => $tunjanganMakanDidapat,
             'tunjangan_kesehatan' => $jabatan->tunjangan_kesehatan,
             'bonus' => $request->bonus ?? 0,
+            'bonus_kinerja' => $request->bonus_kinerja ?? 0,
             'potongan' => $request->potongan ?? 0,
             'total_gaji' => $totalGaji,
         ]);
@@ -207,26 +213,33 @@ class GajiKaryawanController extends Controller
 
         $gajiKaryawan = $query->get();
 
-        return view('gaji.print.all', compact('gajiKaryawan'));
+        // Grouping by month
+        $groupedGaji = $gajiKaryawan->groupBy(function ($item) {
+            return \Carbon\Carbon::parse($item->tanggal_gaji)->format('Y-m');
+        });
+
+        return view('gaji.print.all', compact('groupedGaji'));
     }
 
     public function printMine(Request $request)
     {
         $user = Auth::user();
-        $query = GajiKaryawan::with(['user.jabatan'])
-            ->where('user_id', $user->id);
 
-        // Filter berdasarkan tanggal
+        $query = GajiKaryawan::with(['jabatan'])->where('user_id', $user->id);
+
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $query->whereBetween('tanggal_gaji', [$request->start_date, $request->end_date]);
         } else {
-            // Default ke bulan saat ini
             $query->whereMonth('tanggal_gaji', now()->month)
                 ->whereYear('tanggal_gaji', now()->year);
         }
 
         $gajiKaryawan = $query->get();
 
-        return view('gaji.print.mine', compact('gajiKaryawan', 'user'));
+        $groupedGaji = $gajiKaryawan->groupBy(function ($item) {
+            return \Carbon\Carbon::parse($item->tanggal_gaji)->format('Y-m');
+        });
+
+        return view('gaji.print.mine', compact('groupedGaji', 'user'));
     }
 }

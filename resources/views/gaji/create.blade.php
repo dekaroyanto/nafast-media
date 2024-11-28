@@ -31,10 +31,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label for="jabatan" class="form-label">Jabatan</label>
-                            <input type="text" id="jabatan" class="form-control" readonly>
-                        </div>
+
                         <div class="mb-3">
                             <label for="gaji_pokok" class="form-label">Gaji Pokok</label>
                             <input type="text" id="gaji_pokok" name="gaji_pokok" class="form-control" readonly>
@@ -49,19 +46,23 @@
                             <input type="text" id="tunjangan_makan" name="tunjangan_makan" class="form-control" readonly>
                         </div>
                         <div class="mb-3">
+                            <label for="tunjangan_transport_didapat" class="form-label">Tunjangan Transportasi
+                                Didapat</label>
+                            <input type="text" id="tunjangan_transport_didapat" name="tunjangan_transport_didapat"
+                                class="form-control" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tunjangan_makan_didapat" class="form-label">Tunjangan Makan Didapat</label>
+                            <input type="text" id="tunjangan_makan_didapat" name="tunjangan_makan_didapat"
+                                class="form-control" readonly>
+                        </div>
+                        <div class="mb-3">
                             <label for="tunjangan_kesehatan" class="form-label">Tunjangan Kesehatan</label>
                             <input type="text" id="tunjangan_kesehatan" name="tunjangan_kesehatan" class="form-control"
                                 readonly>
                         </div>
-                        <div class="mb-3">
-                            <label for="jumlah_hari_kerja" class="form-label">Jumlah Hari Kerja</label>
-                            <input type="number" id="jumlah_hari_kerja" name="jumlah_hari_kerja" class="form-control"
-                                value="0" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="jumlah_hadir" class="form-label">Jumlah Hadir</label>
-                            <input type="number" id="jumlah_hadir" name="jumlah_hadir" class="form-control" value="0">
-                        </div>
+
+
                         <div class="mb-3">
                             <label for="gaji_per_hari" class="form-label">Gaji Per Hari</label>
                             <input type="text" id="gaji_per_hari" name="gaji_per_hari" class="form-control" readonly>
@@ -73,7 +74,20 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-
+                        <div class="mb-3">
+                            <label for="jabatan" class="form-label">Jabatan</label>
+                            <input type="text" id="jabatan" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="jumlah_hari_kerja" class="form-label">Jumlah Hari Kerja</label>
+                            <input type="number" id="jumlah_hari_kerja" name="jumlah_hari_kerja" class="form-control"
+                                value="0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="jumlah_hadir" class="form-label">Jumlah Hadir</label>
+                            <input type="number" id="jumlah_hadir" name="jumlah_hadir" class="form-control"
+                                value="0">
+                        </div>
                         <div class="mb-3">
                             <label for="jumlah_izin" class="form-label">Jumlah Izin</label>
                             <input type="number" id="jumlah_izin" name="jumlah_izin" class="form-control" readonly>
@@ -93,20 +107,15 @@
                             <input type="number" id="jumlah_alfa" name="jumlah_alfa" class="form-control" readonly>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="tunjangan_transport_didapat" class="form-label">Tunjangan Transportasi
-                                Didapat</label>
-                            <input type="text" id="tunjangan_transport_didapat" name="tunjangan_transport_didapat"
-                                class="form-control" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label for="tunjangan_makan_didapat" class="form-label">Tunjangan Makan Didapat</label>
-                            <input type="text" id="tunjangan_makan_didapat" name="tunjangan_makan_didapat"
-                                class="form-control" readonly>
-                        </div>
+
                         <div class="mb-3">
                             <label for="bonus" class="form-label">Bonus</label>
                             <input type="number" id="bonus" name="bonus" class="form-control" value="0">
+                        </div>
+                        <div class="mb-3">
+                            <label for="bonus_kinerja" class="form-label">Bonus Kinerja</label>
+                            <input type="number" id="bonus_kinerja" name="bonus_kinerja" class="form-control"
+                                value="0">
                         </div>
                         <div class="mb-3">
                             <label for="potongan" class="form-label">Potongan</label>
@@ -129,6 +138,7 @@
         document.getElementById('jumlah_hadir').addEventListener('input', calculateAll);
         document.getElementById('jumlah_hari_kerja').addEventListener('input', calculateAll);
         document.getElementById('bonus').addEventListener('input', calculateAll);
+        document.getElementById('bonus_kinerja').addEventListener('input', calculateAll);
         document.getElementById('potongan').addEventListener('input', calculateAll);
 
         function fetchPresensi() {
@@ -170,21 +180,29 @@
             const gajiPokok = parseFloat(document.getElementById('gaji_pokok').value) || 0;
             const jumlahHariKerja = parseInt(document.getElementById('jumlah_hari_kerja').value) || 1;
             const jumlahHadir = parseInt(document.getElementById('jumlah_hadir').value) || 0;
+            const jumlahWfh = parseInt(document.getElementById('jumlah_wfh').value) || 0;
             const tunjanganTransport = parseFloat(document.getElementById('tunjangan_transport').value) || 0;
             const tunjanganMakan = parseFloat(document.getElementById('tunjangan_makan').value) || 0;
             const tunjanganKesehatan = parseFloat(document.getElementById('tunjangan_kesehatan').value) || 0;
             const bonus = parseFloat(document.getElementById('bonus').value) || 0;
+            const bonusKinerja = parseFloat(document.getElementById('bonus_kinerja').value) || 0;
             const potongan = parseFloat(document.getElementById('potongan').value) || 0;
 
+            // Perhitungan Gaji Per Hari
             const gajiPerHari = Math.ceil(gajiPokok / jumlahHariKerja);
-            const gajiPerHariDidapat = gajiPerHari * jumlahHadir;
 
+            // Perhitungan Gaji Per Hari yang Didapat
+            const gajiPerHariDidapat = gajiPerHari * (jumlahHadir + jumlahWfh);
+
+            // Perhitungan Tunjangan yang Didapat
             const tunjanganTransportDidapat = tunjanganTransport * jumlahHadir;
             const tunjanganMakanDidapat = tunjanganMakan * jumlahHadir;
 
-            const totalGaji = gajiPerHariDidapat + bonus + tunjanganTransportDidapat + tunjanganMakanDidapat +
-                tunjanganKesehatan - potongan;
+            // Total Gaji
+            const totalGaji = gajiPerHariDidapat + bonus + bonusKinerja + tunjanganTransportDidapat +
+                tunjanganMakanDidapat + tunjanganKesehatan - potongan;
 
+            // Update nilai ke form
             document.getElementById('gaji_per_hari').value = gajiPerHari;
             document.getElementById('gaji_per_hari_didapat').value = gajiPerHariDidapat;
             document.getElementById('tunjangan_transport_didapat').value = tunjanganTransportDidapat;

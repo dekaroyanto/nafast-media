@@ -27,6 +27,7 @@ class GajiKaryawan extends Model
         'tunjangan_kesehatan',
         'tunjangan_jabatan',
         'bonus',
+        'bonus_kinerja',
         'potongan',
         'total_gaji',
         'created_by',

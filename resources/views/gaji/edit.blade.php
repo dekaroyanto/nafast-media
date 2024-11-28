@@ -20,8 +20,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="user_id" class="form-label">Nama Karyawan</label>
-                            <select id="user_id" name="user_id" class="form-control" reaadonly>
-                                <option value="">Pilih Karyawan</option>
+                            <select id="user_id" name="user_id" class="form-control" required>
                                 @foreach ($karyawan as $k)
                                     <option value="{{ $k->id }}" data-jabatan="{{ $k->jabatan->nama_jabatan }}"
                                         data-gajipokok="{{ $k->jabatan->gajipokok }}"
@@ -34,27 +33,59 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label for="jabatan" class="form-label">Jabatan</label>
-                            <input type="text" id="jabatan" class="form-control" readonly>
-                        </div>
+
                         <div class="mb-3">
                             <label for="gaji_pokok" class="form-label">Gaji Pokok</label>
-                            <input type="text" id="gaji_pokok" name="gaji_pokok" class="form-control" readonly>
+                            <input type="text" id="gaji_pokok" name="gaji_pokok" class="form-control"
+                                value="{{ $gajiKaryawan->gaji_pokok }}" readonly>
                         </div>
                         <div class="mb-3">
                             <label for="tunjangan_transport" class="form-label">Tunjangan Transportasi Per Hari</label>
                             <input type="text" id="tunjangan_transport" name="tunjangan_transport" class="form-control"
+                                value="{{ $gajiKaryawan->tunjangan_transport_didapat / max(1, $gajiKaryawan->jumlah_hadir) }}"
                                 readonly>
                         </div>
                         <div class="mb-3">
                             <label for="tunjangan_makan" class="form-label">Tunjangan Makan Per Hari</label>
-                            <input type="text" id="tunjangan_makan" name="tunjangan_makan" class="form-control" readonly>
+                            <input type="text" id="tunjangan_makan" name="tunjangan_makan" class="form-control"
+                                value="{{ $gajiKaryawan->tunjangan_makan_didapat / max(1, $gajiKaryawan->jumlah_hadir) }}"
+                                readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tunjangan_transport_didapat" class="form-label">Tunjangan Transportasi
+                                Didapat</label>
+                            <input type="text" id="tunjangan_transport_didapat" name="tunjangan_transport_didapat"
+                                class="form-control" value="{{ $gajiKaryawan->tunjangan_transport_didapat }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tunjangan_makan_didapat" class="form-label">Tunjangan Makan Didapat</label>
+                            <input type="text" id="tunjangan_makan_didapat" name="tunjangan_makan_didapat"
+                                class="form-control" value="{{ $gajiKaryawan->tunjangan_makan_didapat }}" readonly>
                         </div>
                         <div class="mb-3">
                             <label for="tunjangan_kesehatan" class="form-label">Tunjangan Kesehatan</label>
                             <input type="text" id="tunjangan_kesehatan" name="tunjangan_kesehatan" class="form-control"
-                                readonly>
+                                value="{{ $gajiKaryawan->tunjangan_kesehatan }}" readonly>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label for="gaji_per_hari" class="form-label">Gaji Per Hari</label>
+                            <input type="text" id="gaji_per_hari" name="gaji_per_hari" class="form-control"
+                                value="{{ $gajiKaryawan->gaji_per_hari }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="gaji_per_hari_didapat" class="form-label">Gaji Per Hari Didapat</label>
+                            <input type="text" id="gaji_per_hari_didapat" name="gaji_per_hari_didapat"
+                                class="form-control" value="{{ $gajiKaryawan->gaji_per_hari_didapat }}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="mb-3">
+                            <label for="jabatan" class="form-label">Jabatan</label>
+                            <input type="text" id="jabatan" class="form-control"
+                                value="{{ $gajiKaryawan->user->jabatan->nama_jabatan ?? '' }}" readonly>
                         </div>
                         <div class="mb-3">
                             <label for="jumlah_hari_kerja" class="form-label">Jumlah Hari Kerja</label>
@@ -66,32 +97,36 @@
                             <input type="number" id="jumlah_hadir" name="jumlah_hadir" class="form-control"
                                 value="{{ $gajiKaryawan->jumlah_hadir }}">
                         </div>
-                    </div>
-                    <div class="col-md-6">
                         <div class="mb-3">
                             <label for="jumlah_izin" class="form-label">Jumlah Izin</label>
-                            <input type="number" id="jumlah_izin" name="jumlah_izin" class="form-control" readonly
+                            <input type="number" id="jumlah_izin" name="jumlah_izin" class="form-control"
                                 value="{{ $gajiKaryawan->jumlah_izin }}">
                         </div>
                         <div class="mb-3">
                             <label for="jumlah_sakit" class="form-label">Jumlah Sakit</label>
-                            <input type="number" id="jumlah_sakit" name="jumlah_sakit" class="form-control" readonly
+                            <input type="number" id="jumlah_sakit" name="jumlah_sakit" class="form-control"
                                 value="{{ $gajiKaryawan->jumlah_sakit }}">
                         </div>
                         <div class="mb-3">
                             <label for="jumlah_wfh" class="form-label">Jumlah WFH</label>
-                            <input type="number" id="jumlah_wfh" name="jumlah_wfh" class="form-control" readonly
+                            <input type="number" id="jumlah_wfh" name="jumlah_wfh" class="form-control"
                                 value="{{ $gajiKaryawan->jumlah_wfh }}">
                         </div>
                         <div class="mb-3">
                             <label for="jumlah_alfa" class="form-label">Jumlah Alfa</label>
-                            <input type="number" id="jumlah_alfa" name="jumlah_alfa" class="form-control" readonly
+                            <input type="number" id="jumlah_alfa" name="jumlah_alfa" class="form-control"
                                 value="{{ $gajiKaryawan->jumlah_alfa }}">
                         </div>
+
                         <div class="mb-3">
                             <label for="bonus" class="form-label">Bonus</label>
                             <input type="number" id="bonus" name="bonus" class="form-control"
                                 value="{{ $gajiKaryawan->bonus }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="bonus_kinerja" class="form-label">Bonus Kinerja</label>
+                            <input type="number" id="bonus_kinerja" name="bonus_kinerja" class="form-control"
+                                value="{{ $gajiKaryawan->bonus_kinerja }}">
                         </div>
                         <div class="mb-3">
                             <label for="potongan" class="form-label">Potongan</label>
@@ -100,43 +135,57 @@
                         </div>
                         <div class="mb-3">
                             <label for="total_gaji" class="form-label">Total Gaji</label>
-                            <input type="text" id="total_gaji" name="total_gaji" class="form-control" readonly
-                                value="{{ $gajiKaryawan->total_gaji }}">
+                            <input type="text" id="total_gaji" name="total_gaji" class="form-control"
+                                value="{{ $gajiKaryawan->total_gaji }}" readonly>
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Simpan</button>
+                <button type="submit" class="btn btn-primary">Update</button>
             </form>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const selectedOption = document.querySelector(`#user_id option[value="{{ $gajiKaryawan->user_id }}"]`);
-            updateFormData(selectedOption);
-            calculateAll();
-        });
-
-        document.getElementById('user_id').addEventListener('change', (e) => {
-            updateFormData(e.target.selectedOptions[0]);
-            calculateAll();
-        });
-
-        document.getElementById('tanggal_gaji').addEventListener('change', calculateAll);
+        document.getElementById('user_id').addEventListener('change', fetchPresensi);
+        document.getElementById('tanggal_gaji').addEventListener('change', fetchPresensi);
         document.getElementById('jumlah_hadir').addEventListener('input', calculateAll);
         document.getElementById('jumlah_hari_kerja').addEventListener('input', calculateAll);
         document.getElementById('bonus').addEventListener('input', calculateAll);
+        document.getElementById('bonus_kinerja').addEventListener('input', calculateAll);
         document.getElementById('potongan').addEventListener('input', calculateAll);
+
+        function fetchPresensi() {
+            const userId = document.getElementById('user_id').value;
+            const tanggalGaji = document.getElementById('tanggal_gaji').value;
+
+            if (userId && tanggalGaji) {
+                const selectedOption = document.querySelector(`#user_id option[value="${userId}"]`);
+                updateFormData(selectedOption);
+
+                const [year, month] = tanggalGaji.split('-');
+                fetch(`/jumlah-presensi/${userId}/${year}/${month}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('jumlah_hadir').value = data.jumlah_hadir || 0;
+                        document.getElementById('jumlah_izin').value = data.jumlah_izin || 0;
+                        document.getElementById('jumlah_sakit').value = data.jumlah_sakit || 0;
+                        document.getElementById('jumlah_wfh').value = data.jumlah_wfh || 0;
+                        document.getElementById('jumlah_alfa').value = data.jumlah_alfa || 0;
+                        calculateAll();
+                    })
+                    .catch(error => console.error('Error fetching presensi:', error));
+            }
+        }
 
         function updateFormData(selectedOption) {
             if (selectedOption) {
                 document.getElementById('jabatan').value = selectedOption.getAttribute('data-jabatan') || '';
                 document.getElementById('gaji_pokok').value = selectedOption.getAttribute('data-gajipokok') || 0;
-                document.getElementById('tunjangan_transport').value = selectedOption.getAttribute(
-                    'data-tunjangan-transport') || 0;
+                document.getElementById('tunjangan_transport').value =
+                    selectedOption.getAttribute('data-tunjangan-transport') || 0;
                 document.getElementById('tunjangan_makan').value = selectedOption.getAttribute('data-tunjangan-makan') || 0;
-                document.getElementById('tunjangan_kesehatan').value = selectedOption.getAttribute(
-                    'data-tunjangan-kesehatan') || 0;
+                document.getElementById('tunjangan_kesehatan').value =
+                    selectedOption.getAttribute('data-tunjangan-kesehatan') || 0;
             }
         }
 
@@ -144,20 +193,27 @@
             const gajiPokok = parseFloat(document.getElementById('gaji_pokok').value) || 0;
             const jumlahHariKerja = parseInt(document.getElementById('jumlah_hari_kerja').value) || 1;
             const jumlahHadir = parseInt(document.getElementById('jumlah_hadir').value) || 0;
+            const jumlahWFH = parseInt(document.getElementById('jumlah_wfh').value) || 0;
             const tunjanganTransport = parseFloat(document.getElementById('tunjangan_transport').value) || 0;
             const tunjanganMakan = parseFloat(document.getElementById('tunjangan_makan').value) || 0;
             const tunjanganKesehatan = parseFloat(document.getElementById('tunjangan_kesehatan').value) || 0;
             const bonus = parseFloat(document.getElementById('bonus').value) || 0;
+            const bonus_kinerja = parseFloat(document.getElementById('bonus_kinerja').value) || 0;
             const potongan = parseFloat(document.getElementById('potongan').value) || 0;
 
             const gajiPerHari = Math.ceil(gajiPokok / jumlahHariKerja);
-            const gajiPerHariDidapat = gajiPerHari * jumlahHadir;
+            const gajiPerHariDidapat = (gajiPerHari * jumlahHadir) + (gajiPerHari * jumlahWFH);
             const tunjanganTransportDidapat = tunjanganTransport * jumlahHadir;
             const tunjanganMakanDidapat = tunjanganMakan * jumlahHadir;
 
-            const totalGaji = gajiPerHariDidapat + bonus + tunjanganTransportDidapat + tunjanganMakanDidapat +
+            const totalGaji = gajiPerHariDidapat + bonus + bonus_kinerja + tunjanganTransportDidapat +
+                tunjanganMakanDidapat +
                 tunjanganKesehatan - potongan;
 
+            document.getElementById('gaji_per_hari').value = gajiPerHari;
+            document.getElementById('gaji_per_hari_didapat').value = gajiPerHariDidapat;
+            document.getElementById('tunjangan_transport_didapat').value = tunjanganTransportDidapat;
+            document.getElementById('tunjangan_makan_didapat').value = tunjanganMakanDidapat;
             document.getElementById('total_gaji').value = totalGaji;
         }
     </script>

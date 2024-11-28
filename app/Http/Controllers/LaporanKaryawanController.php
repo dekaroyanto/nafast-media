@@ -11,13 +11,30 @@ class LaporanKaryawanController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        if (Auth::user()->role === 'admin') {
-            $laporans = LaporanKaryawan::with('user')->orderBy('tanggal_laporan', 'desc')->paginate(10);
-        } else {
-            $laporans = LaporanKaryawan::where('user_id', Auth::id())->orderBy('tanggal_laporan', 'desc')->paginate(10);
+        // Query dasar untuk semua laporan
+        $query = LaporanKaryawan::with('user')->orderBy('tanggal_laporan', 'desc');
+
+        // Jika karyawan, filter laporan sesuai kebutuhan
+        if (Auth::user()->role === 'karyawan') {
+            $query->where(function ($q) {
+                $q->where('user_id', Auth::id()) // Laporan milik user sendiri
+                    ->orWhereHas('user', function ($subQuery) {
+                        $subQuery->where('role', 'karyawan'); // Laporan dari karyawan lain
+                    });
+            });
         }
+
+        // Menambahkan fitur pencarian jika diperlukan
+        if ($request->filled('search')) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // Paginate hasil
+        $laporans = $query->paginate(10);
 
         return view('gaji.laporan.index', compact('laporans'));
     }

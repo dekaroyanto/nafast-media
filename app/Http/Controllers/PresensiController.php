@@ -9,12 +9,28 @@ use App\Models\Presensi;
 use Illuminate\Http\Request;
 use App\Models\MonthlyPresence;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class PresensiController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+    public function ingatkanPresensi()
+    {
+        $users = User::all(); // Ambil semua user
+
+        foreach ($users as $user) {
+            Mail::send('emails.reminder', ['user' => $user], function ($message) use ($user) {
+                $message->to($user->email)
+                    ->subject('Pengingat Presensi');
+            });
+        }
+
+        return back()->with('success', 'Pengingat presensi berhasil dikirim ke semua pengguna.');
+    }
+
     public function index(Request $request)
     {
         $user = Auth::user();
@@ -97,7 +113,7 @@ class PresensiController extends Controller
         $request->validate([
             'tanggal_presensi' => 'required|date',
             'user_id' => 'required|exists:users,id',
-            'status_kehadiran' => 'required|in:izin,sakit,wfh,alfa',
+            'status_kehadiran' => 'required|in:hadir,izin,sakit,wfh,alfa',
         ]);
 
         // Cek apakah presensi untuk tanggal ini sudah ada
@@ -115,7 +131,7 @@ class PresensiController extends Controller
             'status_kehadiran' => $request->status_kehadiran,
         ]);
 
-        return redirect()->route('presensikaryawan')->with('success', 'Presensi berhasil ditambahkan.');
+        return redirect()->route('admin.presensi.create')->with('success', 'Presensi berhasil ditambahkan.');
     }
     public function create()
     {
