@@ -7,6 +7,7 @@ use App\Models\Jabatan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
@@ -110,6 +111,7 @@ class AuthController extends Controller
             'bank' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . Auth::id(),
             'username' => 'required|string|max:255|unique:users,username,' . Auth::id(),
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Avatar validation
         ]);
 
         $user = Auth::user();
@@ -120,6 +122,19 @@ class AuthController extends Controller
             $user->bank = $request->bank;
             $user->email = $request->email;
             $user->username = $request->username;
+
+            // Handle avatar upload
+            if ($request->hasFile('avatar')) {
+                // Delete old avatar if exists
+                if ($user->avatar && Storage::exists($user->avatar)) {
+                    Storage::delete($user->avatar);
+                }
+
+                // Save new avatar
+                $avatarPath = $request->file('avatar')->store('avatars', 'public');
+                $user->avatar = $avatarPath;
+            }
+
             $user->save();
         } else {
             return redirect()->route('profile.edit')->with('error', 'User tidak ditemukan.');

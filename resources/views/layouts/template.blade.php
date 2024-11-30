@@ -192,9 +192,16 @@
                                         </div>
                                         <div class="user-img d-flex align-items-center">
                                             <div class="avatar avatar-md">
-                                                <img src="{{ asset('assets/compiled/jpg/1.jpg') }}">
+                                                @if (Auth::user()->avatar)
+                                                    <img src="{{ asset('storage/' . Auth::user()->avatar) }}"
+                                                        alt="User Avatar">
+                                                @else
+                                                    <img src="{{ asset('assets/compiled/jpg/1.jpg') }}"
+                                                        alt="Default Avatar">
+                                                @endif
                                             </div>
                                         </div>
+
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton"

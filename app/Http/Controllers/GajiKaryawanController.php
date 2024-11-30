@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\User;
 
 use App\Models\Presensi;
+use App\Exports\GajiExport;
 use App\Models\GajiKaryawan;
 use Illuminate\Http\Request;
 use App\Models\MonthlyPresence;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class GajiKaryawanController extends Controller
 {
@@ -219,6 +221,11 @@ class GajiKaryawanController extends Controller
         });
 
         return view('gaji.print.all', compact('groupedGaji'));
+    }
+
+    public function export()
+    {
+        return Excel::download(new GajiExport, 'gajis.xlsx');
     }
 
     public function printMine(Request $request)
